@@ -1,0 +1,30 @@
+# .gitignore para WordPress
+# Ignora todos os arquivos do WordPress exceto temas personalizados e instruções de plugins
+
+# Ignorar tudo
+/*
+
+# Não ignorar este .gitignore
+!.gitignore
+
+# Não ignorar a pasta de temas personalizados (exemplo: mytheme)
+!wp-content/themes/
+!wp-content/themes/mytheme/**
+
+# Não ignorar instruções de plugins
+!plugins-instrucoes.txt
+
+# Permitir uploads de imagens de exemplo (opcional)
+#!wp-content/uploads/
+
+# Ignorar arquivos sensíveis
+wp-config.php
+wp-content/debug.log
+
+# Ignorar arquivos temporários
+*.log
+*.tmp
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
