@@ -7,12 +7,26 @@
 # Não ignorar este .gitignore
 !.gitignore
 
-# Não ignorar a pasta de temas personalizados (exemplo: mytheme)
+# Não ignorar a pasta de temas personalizados
+!wp-content/
+wp-content/*
 !wp-content/themes/
-!wp-content/themes/mytheme/**
+wp-content/themes/*
+!wp-content/themes/storefront-child/
+!wp-content/themes/storefront-child/**
+
+# CSS compilado (gerado via sass --watch / npm run build)
+wp-content/themes/storefront-child/assets/css/
 
 # Não ignorar instruções de plugins
 !plugins-instrucoes.txt
+
+# Não ignorar documentação e scripts do projeto
+!PROJECT-GUIDELINES.md
+!importar_imagens_produtos.php
+!cadastrar_produtos.sh
+!atualizar_precos.sh
+!atualizar_categorias_produtos.sh
 
 # Permitir uploads de imagens de exemplo (opcional)
 #!wp-content/uploads/

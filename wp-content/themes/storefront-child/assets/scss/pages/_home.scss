@@ -1,0 +1,62 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+#banner-carousel {
+  .carousel-inner,
+  .carousel-item img {
+    @include full-width-breakout;
+  }
+
+  .carousel-item img {
+    height: 70vh;
+    object-fit: cover;
+    object-position: center;
+
+    @include respond-to(md) {
+      height: 30vh;
+    }
+  }
+
+  .carousel-arrow-icon {
+    @include flex-center;
+    color: $color-muted;
+    opacity: 0.8;
+    font-size: 2.5rem;
+    font-weight: $font-weight-bold;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-image: none !important;
+    color: $color-muted !important;
+    opacity: 0.8 !important;
+    font-size: 2.5rem;
+    @include flex-center;
+
+    &::after {
+      color: $color-muted;
+      opacity: 0.8;
+      font-size: 2.5rem;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  .carousel-control-prev-icon::after {
+    content: '\2039';
+  }
+
+  .carousel-control-next-icon::after {
+    content: '\203A';
+  }
+}

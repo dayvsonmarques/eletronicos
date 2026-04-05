@@ -1,0 +1,35 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.site-header {
+  background-color: $color-white;
+  border-bottom: 1px solid $color-border;
+  padding: $spacing-sm 0;
+
+  .site-branding {
+    .site-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-dark;
+    }
+  }
+
+  .main-navigation {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: $spacing-md;
+    }
+
+    a {
+      color: $color-text;
+      font-weight: $font-weight-bold;
+
+      &:hover {
+        color: $color-primary;
+      }
+    }
+  }
+}
