@@ -1,62 +1,233 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
-#banner-carousel {
-  .carousel-inner,
-  .carousel-item img {
-    @include full-width-breakout;
-  }
+// ─── Banner ──────────────────────────────────────────────────────────────────
 
+#banner-carousel {
   .carousel-item img {
     height: 70vh;
+    width: 100%;
     object-fit: cover;
     object-position: center;
 
     @include respond-to(md) {
-      height: 30vh;
+      height: 40vh;
     }
-  }
-
-  .carousel-arrow-icon {
-    @include flex-center;
-    color: $color-muted;
-    opacity: 0.8;
-    font-size: 2.5rem;
-    font-weight: $font-weight-bold;
-    width: 2.5rem;
-    height: 2.5rem;
-    background: none;
-    border: none;
-    box-shadow: none;
   }
 
   .carousel-control-prev,
   .carousel-control-next {
+    width: auto;
+    padding: 0;
     background: none !important;
     box-shadow: none !important;
+    opacity: 1;
+    align-items: center;
   }
 
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    background-image: none !important;
-    color: $color-muted !important;
-    opacity: 0.8 !important;
-    font-size: 2.5rem;
-    @include flex-center;
+  .carousel-control-prev { left: 0; }
+  .carousel-control-next { right: 0; }
 
-    &::after {
-      color: $color-muted;
-      opacity: 0.8;
-      font-size: 2.5rem;
-      font-weight: $font-weight-bold;
+  .carousel-arrow-icon {
+    @include flex-center;
+    font-size: 5rem;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    line-height: 1;
+    width: auto;
+    height: auto;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0 $spacing-xs;
+  }
+}
+
+// ─── Categories ──────────────────────────────────────────────────────────────
+.home-categories {
+  padding: $spacing-xl 0 $spacing-lg;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: $spacing-md;
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  .carousel-control-prev-icon::after {
-    content: '\2039';
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-lg $spacing-sm;
+    background: $color-light;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    text-decoration: none;
+    color: $color-dark;
+    transition: $transition-base;
+    text-align: center;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
+      border-color: $color-primary;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($color-primary, 0.3);
+    }
+
+    .category-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: $color-border;
+    }
+
+    .category-icon {
+      font-size: 2rem;
+    }
+
+    .category-name {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+    }
+
+    .category-count {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+  }
+}
+
+// ─── Promotions slider ───────────────────────────────────────────────────────
+.home-promotions {
+  padding: $spacing-xl 0;
+  background: $color-light;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
   }
 
-  .carousel-control-next-icon::after {
-    content: '\203A';
+  .promo-track-wrapper {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .promo-track {
+    display: flex;
+    gap: $spacing-md;
+    will-change: transform;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .promo-card {
+    flex: 0 0 220px;
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    overflow: hidden;
+    text-decoration: none;
+    color: $color-dark;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .promo-body {
+      padding: $spacing-sm $spacing-md $spacing-md;
+    }
+
+    .promo-title {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .promo-old-price {
+      font-size: 0.75rem;
+      color: $color-muted;
+      text-decoration: line-through;
+    }
+
+    .promo-price {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-danger;
+    }
+
+    .promo-badge {
+      display: inline-block;
+      background: $color-danger;
+      color: $color-white;
+      font-size: 0.7rem;
+      font-weight: $font-weight-bold;
+      padding: 2px 6px;
+      border-radius: $radius-sm;
+      margin-bottom: $spacing-xs;
+    }
+  }
+}
+
+// ─── Featured products ───────────────────────────────────────────────────────
+.home-products {
+  padding: $spacing-xl 0;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+  }
+
+  .card {
+    @include card-base;
+
+    .card-img-top {
+      height: 180px;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: $spacing-md;
+    }
+
+    .card-title {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+    }
   }
 }
