@@ -1,7 +1,8 @@
 #!/bin/bash
 # Script para cadastrar 50 produtos de exemplo no WooCommerce via WP-CLI
 
-WP="php wp-cli.phar"
+WP_ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+WP="php $WP_ROOT/wp-cli.phar --path=$WP_ROOT"
 
 # Produtos de exemplo (nome|preço|categoria|descrição)
 PRODUTOS=(
