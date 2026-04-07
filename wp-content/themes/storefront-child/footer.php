@@ -1,10 +1,15 @@
 <?php
-/**
- * Footer customizado para Storefront Child Eletronicos
- */
 if (!defined('ABSPATH')) exit;
 ?>
-<footer class="bg-white border-top pt-5 mt-5">
+
+    <?php if (!is_front_page()) : ?>
+    </div><!-- .col-full -->
+    <?php endif; ?>
+  </div><!-- #content -->
+
+  <?php do_action('storefront_before_footer'); ?>
+
+  <footer id="colophon" class="site-footer bg-white border-top pt-5 mt-5" role="contentinfo">
   <div class="container">
     <div class="row gy-4 pb-5 align-items-start">
       <div class="col-12 col-lg-4 mb-4 mb-lg-0">
@@ -32,5 +37,10 @@ if (!defined('ABSPATH')) exit;
       </div>
     </div>
   </div>
-</footer>
+  </footer><!-- #colophon -->
+
+  <?php do_action('storefront_after_footer'); ?>
+
+</div><!-- #page -->
+
 <?php wp_footer(); ?>
