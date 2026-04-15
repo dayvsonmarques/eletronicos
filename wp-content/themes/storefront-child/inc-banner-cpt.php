@@ -1,5 +1,4 @@
 <?php
-// CPT para banners do site
 add_action('init', function() {
     register_post_type('banner_home', [
         'labels' => [
@@ -21,17 +20,18 @@ add_action('init', function() {
         'show_in_rest' => false,
     ]);
 });
-// Campos extras: link e texto
+
 add_action('add_meta_boxes', function() {
     add_meta_box('banner_home_link', 'Link do Banner (opcional)', function($post) {
         $value = get_post_meta($post->ID, '_banner_link', true);
-        echo '<input type="url" name="banner_link" value="' . esc_attr($value) . '" style="width:100%" placeholder="https://...">';
+        echo '<input type="url" name="banner_link" value="' . esc_attr($value) . '" class="banner-meta-field" placeholder="https://...">';
     }, 'banner_home', 'normal');
     add_meta_box('banner_home_text', 'Texto do Banner (opcional)', function($post) {
         $value = get_post_meta($post->ID, '_banner_text', true);
-        echo '<textarea name="banner_text" style="width:100%" rows="2" placeholder="Texto opcional do banner">' . esc_textarea($value) . '</textarea>';
+        echo '<textarea name="banner_text" class="banner-meta-field" rows="2" placeholder="Texto opcional do banner">' . esc_textarea($value) . '</textarea>';
     }, 'banner_home', 'normal');
 });
+
 add_action('save_post_banner_home', function($post_id) {
     if (isset($_POST['banner_link'])) {
         update_post_meta($post_id, '_banner_link', esc_url_raw($_POST['banner_link']));

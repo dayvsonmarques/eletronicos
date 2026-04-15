@@ -1,13 +1,9 @@
 <?php
-/*
- * Template Name: Home Custom Eletronicos
- * Description: Página inicial personalizada para Storefront Child Eletronicos
- */
+/* Template Name: Home Custom Eletronicos */
 get_header();
 ?>
 
 <?php
-// ─── Categories ──────────────────────────────────────────────────────────────
 $top_cats = get_terms([
   'taxonomy'   => 'product_cat',
   'hide_empty' => true,
@@ -40,8 +36,22 @@ $top_cats = get_terms([
   </div>
 </section>
 
+<style>
+  .content-img{
+    position: relative;
+  }
+
+  .content-img__image{
+    max-width: 50vw;
+    margin: auto;
+  }
+</style>
+
+<div class="content-img">
+    <img class="content-img__image" src="https://img.odcdn.com.br/wp-content/uploads/2023/04/codigo-programacao-Ali-Shah-Lakhani-Unsplash-1920x1080.jpg" alt="">
+</div>
+
 <?php
-// ─── Promotions slider ───────────────────────────────────────────────────────
 $promo_query = new WP_Query([
   'post_type'      => 'product',
   'post_status'    => 'publish',
@@ -96,7 +106,6 @@ if ($promo_query->have_posts()) :
 <?php endif; ?>
 
 <?php
-// ─── Featured products ───────────────────────────────────────────────────────
 $products_query = new WP_Query([
   'post_type'      => 'product',
   'post_status'    => 'publish',

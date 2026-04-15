@@ -1,5 +1,4 @@
 (function () {
-  // ─── Sticky header ──────────────────────────────────────────────────────────
   var masthead = document.getElementById('masthead');
   var sentinel = document.getElementById('after-banner-sentinel');
 
@@ -17,7 +16,6 @@
     observer.observe(sentinel);
   }
 
-  // ─── Promo infinite slider ──────────────────────────────────────────────────
   var track = document.getElementById('promo-track');
   if (!track) return;
 

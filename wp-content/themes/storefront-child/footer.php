@@ -10,11 +10,11 @@ if (!defined('ABSPATH')) exit;
   <?php do_action('storefront_before_footer'); ?>
 
   <footer id="colophon" class="site-footer bg-white border-top pt-5 mt-5" role="contentinfo">
-  <div class="container">
+  <div class="col-full">
     <div class="row gy-4 pb-5 align-items-start">
       <div class="col-12 col-lg-4 mb-4 mb-lg-0">
         <h2 class="fw-bold mb-3"><?php bloginfo('name'); ?></h2>
-        <p class="text-secondary mb-0" style="max-width: 350px;">Sua loja de eletrônicos e componentes. Qualidade, preço justo e entrega rápida.</p>
+        <p class="text-secondary mb-0 footer-description">Sua loja de eletrônicos e componentes. Qualidade, preço justo e entrega rápida.</p>
       </div>
       <div class="col-12 col-lg-4 mb-4 mb-lg-0">
         <ul class="list-unstyled">
@@ -25,8 +25,8 @@ if (!defined('ABSPATH')) exit;
       </div>
       <div class="col-12 col-lg-4 d-flex justify-content-lg-end justify-content-center">
         <div>
-          <a href="#" class="text-dark me-4" style="font-size: 3rem;"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="text-dark" style="font-size: 3rem;"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="text-dark me-4 footer-social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-dark footer-social-link"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
     </div>

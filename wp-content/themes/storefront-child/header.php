@@ -17,22 +17,31 @@ if (!defined('ABSPATH')) exit;
 
   <?php do_action('storefront_before_header'); ?>
 
-  <header id="masthead" class="site-header py-3" role="banner">
+  <header id="masthead" class="site-header" role="banner">
     <div class="col-full">
       <div class="d-flex align-items-center justify-content-between flex-wrap">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="fw-bold fs-3 text-decoration-none mb-2 mb-md-0 site-logo-text">
           <?php bloginfo('name'); ?>
         </a>
-        <nav>
-          <?php
-            wp_nav_menu([
-              'theme_location' => 'primary',
-              'container'      => false,
-              'menu_class'     => 'nav gap-2',
-              'fallback_cb'    => 'wp_page_menu',
-            ]);
-          ?>
-        </nav>
+        <div class="d-flex align-items-center gap-3">
+          <nav>
+            <?php
+              wp_nav_menu([
+                'theme_location' => 'primary',
+                'container'      => false,
+                'menu_class'     => 'nav gap-2',
+                'fallback_cb'    => 'wp_page_menu',
+              ]);
+            ?>
+          </nav>
+          <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link text-decoration-none position-relative" aria-label="Carrinho">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
+            <span class="cart-count badge"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
+          </a>
+        </div>
       </div>
     </div>
   </header>

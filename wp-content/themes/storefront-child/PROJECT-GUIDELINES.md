@@ -27,8 +27,9 @@ Exemplos:
 
 ## Documentação de código
 
-- **Não** escreva comentários inline dentro de arquivos de código.
-- Quando necessário, crie um arquivo dedicado em `docs/`.
+- **Não** escreva comentários inline dentro de arquivos de código — nem durante geração automática de código.
+- O código deve ser auto explicativo: nomes de variáveis, funções e classes descrevem a intenção.
+- Quando documentação for necessária, crie um arquivo dedicado em `docs/`.
 - Nomeie o arquivo pelo assunto: `docs/checkout-flow.md`, `docs/hooks.md`, etc.
 
 ## WordPress / WooCommerce
