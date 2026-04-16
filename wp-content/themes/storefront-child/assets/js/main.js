@@ -1,21 +1,15 @@
 (function () {
-  var masthead = document.getElementById('masthead');
-  var sentinel = document.getElementById('after-banner-sentinel');
-
-  if (masthead && sentinel) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) {
-          masthead.classList.add('is-sticky');
-        } else {
-          masthead.classList.remove('is-sticky');
-        }
-      });
-    }, { threshold: 0 });
-
-    observer.observe(sentinel);
+  var toggle = document.getElementById('nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', open);
+    });
   }
+})();
 
+(function () {
   var track = document.getElementById('promo-track');
   if (!track) return;
 

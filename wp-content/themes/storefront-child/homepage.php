@@ -15,41 +15,24 @@ $top_cats = get_terms([
 ?>
 <section class="home-categories">
   <div class="col-full">
-    <h2 class="section-title">Categorias</h2>
     <div class="category-grid">
       <?php foreach ($top_cats as $cat) :
         $thumb_id  = get_term_meta($cat->term_id, 'thumbnail_id', true);
-        $thumb_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'thumbnail') : '';
+        $thumb_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'medium') : '';
         $cat_url   = get_term_link($cat);
       ?>
       <a href="<?php echo esc_url($cat_url); ?>" class="category-card">
         <?php if ($thumb_url) : ?>
           <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($cat->name); ?>" class="category-thumb">
         <?php else : ?>
-          <span class="category-icon">&#9711;</span>
+          <span class="category-icon"><?php echo eletronicos_category_icon($cat->slug); ?></span>
         <?php endif; ?>
         <span class="category-name"><?php echo esc_html($cat->name); ?></span>
-        <span class="category-count"><?php echo (int) $cat->count; ?> produtos</span>
       </a>
       <?php endforeach; ?>
     </div>
   </div>
 </section>
-
-<style>
-  .content-img{
-    position: relative;
-  }
-
-  .content-img__image{
-    max-width: 50vw;
-    margin: auto;
-  }
-</style>
-
-<div class="content-img">
-    <img class="content-img__image" src="https://img.odcdn.com.br/wp-content/uploads/2023/04/codigo-programacao-Ali-Shah-Lakhani-Unsplash-1920x1080.jpg" alt="">
-</div>
 
 <?php
 $promo_query = new WP_Query([
@@ -135,6 +118,93 @@ $products_query = new WP_Query([
         </a>
       </div>
       <?php endwhile; wp_reset_postdata(); ?>
+    </div>
+  </div>
+</section>
+
+<?php
+$pb_title    = get_theme_mod('promo_banner_title', '');
+$pb_subtitle = get_theme_mod('promo_banner_subtitle', '');
+$pb_btn_text = get_theme_mod('promo_banner_btn_text', '');
+$pb_btn_link = get_theme_mod('promo_banner_btn_link', '');
+$pb_has_bg   = (bool) get_theme_mod('promo_banner_image', '');
+
+if ($pb_title || $pb_has_bg) :
+?>
+<section class="home-promo-banner">
+  <div class="col-full">
+    <?php if ($pb_title) : ?>
+      <h2 class="promo-banner-title"><?php echo esc_html($pb_title); ?></h2>
+    <?php endif; ?>
+    <?php if ($pb_subtitle) : ?>
+      <p class="promo-banner-subtitle"><?php echo esc_html($pb_subtitle); ?></p>
+    <?php endif; ?>
+    <?php if ($pb_btn_link && $pb_btn_text) : ?>
+      <a href="<?php echo esc_url($pb_btn_link); ?>" class="btn-promo"><?php echo esc_html($pb_btn_text); ?></a>
+    <?php endif; ?>
+  </div>
+</section>
+<?php endif; ?>
+
+<?php
+$brands = get_posts([
+  'post_type'      => 'brand',
+  'posts_per_page' => 20,
+  'orderby'        => 'menu_order',
+  'order'          => 'ASC',
+]);
+
+if ($brands) :
+?>
+<section class="home-brands">
+  <div class="col-full">
+    <h2 class="section-title">Marcas</h2>
+    <div class="brands-grid">
+      <?php foreach ($brands as $brand) :
+        $logo = get_the_post_thumbnail_url($brand->ID, 'medium');
+      ?>
+      <div class="brand-item">
+        <?php if ($logo) : ?>
+          <img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr($brand->post_title); ?>">
+        <?php else : ?>
+          <span class="brand-name-text"><?php echo esc_html($brand->post_title); ?></span>
+        <?php endif; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<section class="home-contact">
+  <div class="col-full">
+    <div class="row g-0">
+      <div class="col-12 col-md-4 contact-item contact-item--phone">
+        <div class="contact-icon">&#9990;</div>
+        <div class="contact-label">Compre por telefone</div>
+        <?php $phone = get_theme_mod('contact_phone', ''); ?>
+        <?php if ($phone) : ?>
+          <div class="contact-value"><a href="tel:<?php echo esc_attr(preg_replace('/\D/', '', $phone)); ?>"><?php echo esc_html($phone); ?></a></div>
+        <?php else : ?>
+          <div class="contact-value">Configure em Aparência &gt; Personalizar</div>
+        <?php endif; ?>
+      </div>
+      <div class="col-12 col-md-4 contact-item contact-item--whatsapp">
+        <div class="contact-icon">&#128172;</div>
+        <div class="contact-label">Fale por WhatsApp</div>
+        <?php $whatsapp = get_theme_mod('contact_whatsapp', ''); ?>
+        <?php if ($whatsapp) : ?>
+          <div class="contact-value"><a href="https://wa.me/<?php echo esc_attr(preg_replace('/\D/', '', $whatsapp)); ?>" target="_blank" rel="noopener"><?php echo esc_html($whatsapp); ?></a></div>
+        <?php else : ?>
+          <div class="contact-value">Configure em Aparência &gt; Personalizar</div>
+        <?php endif; ?>
+      </div>
+      <div class="col-12 col-md-4 contact-item contact-item--store">
+        <div class="contact-icon">&#128205;</div>
+        <div class="contact-label">Nossa loja física</div>
+        <?php $address = get_theme_mod('contact_address', ''); ?>
+        <div class="contact-value"><?php echo $address ? nl2br(esc_html($address)) : 'Configure em Aparência &gt; Personalizar'; ?></div>
+      </div>
     </div>
   </div>
 </section>

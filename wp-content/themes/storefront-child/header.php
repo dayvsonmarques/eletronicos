@@ -1,6 +1,5 @@
-<?php
-if (!defined('ABSPATH')) exit;
-?><!DOCTYPE html>
+<?php if (!defined('ABSPATH')) exit; ?>
+<!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
   <meta charset="<?php bloginfo('charset'); ?>">
@@ -19,21 +18,21 @@ if (!defined('ABSPATH')) exit;
 
   <header id="masthead" class="site-header" role="banner">
     <div class="col-full">
-      <div class="d-flex align-items-center justify-content-between flex-wrap">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="fw-bold fs-3 text-decoration-none mb-2 mb-md-0 site-logo-text">
+      <div id="header-row">
+        <a class="site-logo-text fw-bold fs-4 text-decoration-none" href="<?php echo esc_url(home_url('/')); ?>">
           <?php bloginfo('name'); ?>
         </a>
-        <div class="d-flex align-items-center gap-3">
-          <nav>
-            <?php
-              wp_nav_menu([
-                'theme_location' => 'primary',
-                'container'      => false,
-                'menu_class'     => 'nav gap-2',
-                'fallback_cb'    => 'wp_page_menu',
-              ]);
-            ?>
-          </nav>
+        <nav id="site-nav" aria-label="Menu principal">
+          <?php
+            wp_nav_menu([
+              'theme_location' => 'primary',
+              'container'      => false,
+              'menu_class'     => 'nav gap-1',
+              'fallback_cb'    => false,
+            ]);
+          ?>
+        </nav>
+        <div id="header-actions">
           <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link text-decoration-none position-relative" aria-label="Carrinho">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -41,6 +40,9 @@ if (!defined('ABSPATH')) exit;
             <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
             <span class="cart-count badge"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
           </a>
+          <button id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
       </div>
     </div>
@@ -68,6 +70,13 @@ if (!defined('ABSPATH')) exit;
   ?>
   <section id="banner-section">
     <div id="banner-carousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <?php for ($j = 0; $j < count($banners); $j++) : ?>
+          <button type="button" data-bs-target="#banner-carousel" data-bs-slide-to="<?php echo $j; ?>"
+            <?php if ($j === 0) echo 'class="active" aria-current="true"'; ?>
+            aria-label="Slide <?php echo $j + 1; ?>"></button>
+        <?php endfor; ?>
+      </div>
       <div class="carousel-inner">
         <?php $i = 0; foreach ($banners as $banner) :
           if (isset($banner->ID)) {
@@ -104,8 +113,6 @@ if (!defined('ABSPATH')) exit;
       </button>
     </div>
   </section>
-
-  <div id="after-banner-sentinel"></div>
 
   <?php else : ?>
     <div class="col-full">
