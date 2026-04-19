@@ -34,6 +34,9 @@ add_action('customize_register', function ($wp_customize) {
     $wp_customize->add_setting('contact_whatsapp', ['default' => '', 'sanitize_callback' => 'sanitize_text_field']);
     $wp_customize->add_control('contact_whatsapp', ['label' => 'WhatsApp', 'section' => 'contact_info', 'type' => 'text']);
 
+    $wp_customize->add_setting('contact_whatsapp_message', ['default' => 'Olá! Gostaria de saber mais sobre os produtos.', 'sanitize_callback' => 'sanitize_text_field']);
+    $wp_customize->add_control('contact_whatsapp_message', ['label' => 'Mensagem padrão do WhatsApp', 'section' => 'contact_info', 'type' => 'text']);
+
     $wp_customize->add_setting('contact_address', ['default' => '', 'sanitize_callback' => 'sanitize_textarea_field']);
     $wp_customize->add_control('contact_address', ['label' => 'Endereço da loja', 'section' => 'contact_info', 'type' => 'textarea']);
 });

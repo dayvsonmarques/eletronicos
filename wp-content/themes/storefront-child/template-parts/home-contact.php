@@ -2,19 +2,22 @@
 
 $phone    = get_theme_mod( 'contact_phone', '' );
 $whatsapp = get_theme_mod( 'contact_whatsapp', '' );
+$wa_msg   = get_theme_mod( 'contact_whatsapp_message', 'Olá! Gostaria de saber mais sobre os produtos.' );
 $address  = get_theme_mod( 'contact_address', '' );
 $fallback = 'Configure em Aparência &gt; Personalizar';
+
+$icons_uri = get_stylesheet_directory_uri() . '/assets/img/icons/';
 ?>
 <section class="home-contact">
 	<div class="col-full">
 		<div class="row g-0">
 
 			<div class="col-12 col-md-4 contact-item contact-item--phone">
-				<div class="contact-icon">&#9990;</div>
+				<div class="contact-icon"><img src="<?php echo esc_url( $icons_uri . 'call.png' ); ?>" alt="Telefone"></div>
 				<div class="contact-label">Compre por telefone</div>
 				<div class="contact-value">
 					<?php if ( $phone ) : ?>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/\D/', '', $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a>
+						<a href="tel:<?php echo esc_attr( preg_replace( '/\D/', '', $phone ) ); ?>" class="contact-btn">Ligar agora</a>
 					<?php else : ?>
 						<?php echo $fallback; ?>
 					<?php endif; ?>
@@ -22,11 +25,14 @@ $fallback = 'Configure em Aparência &gt; Personalizar';
 			</div>
 
 			<div class="col-12 col-md-4 contact-item contact-item--whatsapp">
-				<div class="contact-icon">&#128172;</div>
+				<div class="contact-icon"><img src="<?php echo esc_url( $icons_uri . 'whatsapp.png' ); ?>" alt="WhatsApp"></div>
 				<div class="contact-label">Fale por WhatsApp</div>
 				<div class="contact-value">
-					<?php if ( $whatsapp ) : ?>
-						<a href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', $whatsapp ) ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $whatsapp ); ?></a>
+					<?php if ( $whatsapp ) :
+						$wa_number = preg_replace( '/\D/', '', $whatsapp );
+						$wa_url    = 'https://wa.me/' . $wa_number . '?text=' . rawurlencode( $wa_msg );
+					?>
+						<a href="<?php echo esc_url( $wa_url ); ?>" class="contact-btn contact-btn--whatsapp" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
 					<?php else : ?>
 						<?php echo $fallback; ?>
 					<?php endif; ?>
@@ -34,7 +40,7 @@ $fallback = 'Configure em Aparência &gt; Personalizar';
 			</div>
 
 			<div class="col-12 col-md-4 contact-item contact-item--store">
-				<div class="contact-icon">&#128205;</div>
+				<div class="contact-icon"><img src="<?php echo esc_url( $icons_uri . 'location.png' ); ?>" alt="Localização"></div>
 				<div class="contact-label">Nossa loja física</div>
 				<div class="contact-value">
 					<?php echo $address ? nl2br( esc_html( $address ) ) : $fallback; ?>
