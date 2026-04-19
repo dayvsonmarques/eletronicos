@@ -1,0 +1,31 @@
+@use '../abstracts/variables' as *;
+
+.site-footer {
+  background-color: $color-dark;
+  color: $color-light;
+  padding: $spacing-xl 0 $spacing-lg;
+  margin-top: $spacing-xl;
+
+  a {
+    color: $color-light;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  .footer-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  .site-info {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-muted;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: $spacing-md;
+  }
+}
