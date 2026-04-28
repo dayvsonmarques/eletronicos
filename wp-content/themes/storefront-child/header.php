@@ -28,19 +28,6 @@
             <?php endif; ?>
           </a>
 
-          <div id="site-nav" class="header-nav">
-            <nav aria-label="Menu principal">
-              <?php
-                wp_nav_menu([
-                  'theme_location' => 'primary',
-                  'container'      => false,
-                  'menu_class'     => 'header-menu',
-                  'fallback_cb'    => false,
-                ]);
-              ?>
-            </nav>
-          </div>
-
           <div class="header-actions">
             <button id="search-toggle" class="header-icon-btn" type="button" aria-label="Buscar" aria-expanded="false" aria-controls="header-search">
               <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -67,6 +54,17 @@
         </div>
       </div>
     </div>
+
+    <nav id="site-nav" class="header-nav-bar" aria-label="Menu principal">
+      <?php
+        wp_nav_menu([
+          'theme_location' => 'primary',
+          'container'      => false,
+          'menu_class'     => 'header-menu',
+          'fallback_cb'    => false,
+        ]);
+      ?>
+    </nav>
 
     <div id="header-search" class="header-search-panel" hidden>
       <div class="col-full">

@@ -44,86 +44,159 @@
   white-space: nowrap;
 }
 
-// ── Inline nav (desktop) ──────────────────────────────────────────────────────
-.header-nav {
-  flex: 1 1 auto;
+// ── Nav bar: full-width row below header-main ─────────────────────────────────
+.header-nav-bar {
+  width: 100%;
+  background: $color-dark;
   display: flex;
-  align-items: center;
+  justify-content: center;
 
-  nav {
-    display: flex;
-  }
-
+  // ── Top-level menu ──────────────────────────────────────────────────────────
   .header-menu {
     display: flex;
-    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 0;
 
-    > li > a {
-      display: block;
-      padding: $spacing-xs $spacing-sm;
-      color: $color-dark;
-      font-size: $font-size-sm;
-      font-weight: 600;
-      white-space: nowrap;
-      border-radius: $radius-sm;
-      transition: color 0.2s ease, background 0.2s ease;
+    > li {
+      position: relative;
 
-      &:hover {
-        color: $color-primary;
-        background: $color-light;
+      > a {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        padding: $spacing-sm $spacing-md;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: $font-size-sm;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: color 0.2s ease, background 0.2s ease;
+
+        &:hover {
+          color: $color-white;
+          background: rgba(255, 255, 255, 0.1);
+        }
       }
-    }
 
-    > li.current-menu-item > a,
-    > li.current_page_item > a {
-      color: $color-primary;
+      &.menu-item-has-children > a::after {
+        content: '▾';
+        font-size: 0.75em;
+        opacity: 0.7;
+        margin-left: auto;
+      }
+
+      &.current-menu-item > a,
+      &.current_page_item > a {
+        color: $color-white;
+        background: rgba(255, 255, 255, 0.15);
+      }
     }
   }
 
-  @include respond-to(md) {
+  // ── Dropdown submenus ───────────────────────────────────────────────────────
+  .sub-menu {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    min-width: 220px;
     background: $color-white;
-    border-top: 1px solid $color-border;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+    border: 1px solid $color-border;
+    border-top: 2px solid $color-primary;
+    border-radius: 0 0 $radius-sm $radius-sm;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    z-index: 1001;
+    list-style: none;
+    margin: 0;
+    padding: $spacing-xs 0;
+
+    li {
+      position: relative;
+
+      a {
+        display: block;
+        padding: $spacing-sm $spacing-md;
+        color: $color-dark;
+        font-size: $font-size-sm;
+        transition: color 0.2s ease, background 0.2s ease;
+        white-space: nowrap;
+
+        &:hover {
+          color: $color-primary;
+          background: $color-light;
+        }
+      }
+
+      // Third level: offset to the right
+      &.menu-item-has-children > a::after {
+        content: '›';
+        float: right;
+        opacity: 0.5;
+      }
+
+      .sub-menu {
+        top: 0;
+        left: 100%;
+        border-top: 1px solid $color-border;
+        border-top-color: $color-primary;
+      }
+
+      &:hover > .sub-menu {
+        display: block;
+      }
+    }
+  }
+
+  .header-menu > li:hover > .sub-menu {
+    display: block;
+  }
+
+  // ── Mobile ──────────────────────────────────────────────────────────────────
+  @include respond-to(md) {
+    display: none;
+    justify-content: flex-start;
 
     &.is-open {
-      display: block;
-    }
-
-    nav {
-      flex-direction: column;
+      display: flex;
     }
 
     .header-menu {
       flex-direction: column;
-      align-items: stretch;
+      width: 100%;
       padding: $spacing-sm $spacing-lg;
 
       > li > a {
-        padding: $spacing-sm 0;
-        border-radius: 0;
+        color: $color-dark;
         border-bottom: 1px solid $color-border;
-        font-size: $font-size-base;
+        padding: $spacing-sm 0;
         background: none;
 
-        &:hover {
-          color: $color-primary;
-          background: none;
-        }
+        &:hover { color: $color-primary; background: none; }
       }
 
-      > li:last-child > a {
-        border-bottom: none;
+      > li:last-child > a { border-bottom: none; }
+    }
+
+    .sub-menu {
+      display: block;
+      position: static;
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      padding: 0 0 0 $spacing-md;
+      background: none;
+
+      li a {
+        color: $color-secondary;
+        border-bottom: 1px solid $color-border;
+        padding: $spacing-xs 0;
+
+        &:hover { color: $color-primary; }
       }
+
+      li:last-child a { border-bottom: none; }
+
+      .sub-menu { padding-left: $spacing-md; }
     }
   }
 }
