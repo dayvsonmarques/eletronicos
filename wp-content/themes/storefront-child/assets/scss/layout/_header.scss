@@ -54,9 +54,11 @@
   white-space: nowrap;
 }
 
-// ── Search bar ────────────────────────────────────────────────────────────────
+// ── Search bar (hidden by default, toggled via JS) ────────────────────────────
 .header-search {
   flex: 1 1 auto;
+
+  &[hidden] { display: none !important; }
 
   form,
   .woocommerce-product-search,
@@ -83,15 +85,13 @@
       outline: none;
     }
 
-    &::placeholder {
-      color: $color-muted;
-    }
+    &::placeholder { color: $color-muted; }
   }
 
   button[type="submit"] {
     flex: 0 0 auto;
     padding: 0 $spacing-md;
-    background: $color-primary;
+    background: $color-muted;
     border: none;
     border-radius: 0 $radius-sm $radius-sm 0;
     color: $color-white;
@@ -99,15 +99,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: $spacing-xs;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-bold;
     transition: background 0.2s ease;
 
-    &:hover {
-      background: color.adjust($color-primary, $lightness: -8%);
-    }
+    &:hover { background: $color-dark; }
   }
+
+  @include respond-to(md) {
+    flex-basis: 100%;
+    order: 3;
+    padding-bottom: $spacing-sm;
+  }
+}
+
+// ── Search/icon toggle button ─────────────────────────────────────────────────
+.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  color: $color-secondary;
+  background: none;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    color: $color-primary;
+    background: $color-light;
+  }
+
+  &[aria-expanded="true"] {
+    color: $color-primary;
+
+    .icon-search { display: none; }
+    .icon-close  { display: block; }
+  }
+
+  .icon-close { display: none; }
 }
 
 // ── Actions: cart + hamburger ─────────────────────────────────────────────────

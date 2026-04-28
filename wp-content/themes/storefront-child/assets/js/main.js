@@ -9,6 +9,40 @@
 })();
 
 (function () {
+  var btn = document.getElementById('search-toggle');
+  var panel = document.getElementById('header-search');
+  if (!btn || !panel) return;
+
+  btn.addEventListener('click', function () {
+    var open = panel.hasAttribute('hidden') ? true : false;
+    if (open) {
+      panel.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      var input = panel.querySelector('input[type="search"]');
+      if (input) input.focus();
+    } else {
+      panel.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hasAttribute('hidden')) {
+      panel.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!panel.hasAttribute('hidden') && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      panel.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+
+(function () {
   var toggle = document.getElementById('nav-toggle');
   var nav = document.getElementById('site-nav');
   if (toggle && nav) {
