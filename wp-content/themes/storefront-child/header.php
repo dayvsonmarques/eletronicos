@@ -34,7 +34,7 @@
                 wp_nav_menu([
                   'theme_location' => 'primary',
                   'container'      => false,
-                  'menu_class'     => 'nav-menu',
+                  'menu_class'     => 'header-menu',
                   'fallback_cb'    => false,
                 ]);
               ?>
