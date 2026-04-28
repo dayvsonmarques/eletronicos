@@ -201,6 +201,90 @@
   }
 }
 
+// ─── Contact bar ─────────────────────────────────────────────────────────────
+.home-contact {
+  background: $color-dark;
+  color: $color-white;
+  padding: $spacing-xl 0;
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: $spacing-lg $spacing-xl;
+
+    & + .contact-item {
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-lg;
+      border-left: none !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+      &:first-child {
+        border-top: none;
+      }
+    }
+  }
+
+  .contact-icon {
+    margin-bottom: $spacing-md;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+    }
+  }
+
+  .contact-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: $spacing-md;
+  }
+
+  .contact-value {
+    font-size: $font-size-base;
+    color: $color-white;
+    line-height: $line-height-base;
+  }
+
+  .contact-btn {
+    display: inline-block;
+    padding: $spacing-sm $spacing-lg;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: $radius-sm;
+    color: $color-white;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    transition: $transition-base;
+
+    &:hover {
+      background: $color-white;
+      border-color: $color-white;
+      color: $color-dark;
+    }
+
+    &--whatsapp {
+      border-color: #25d366;
+      color: #25d366;
+
+      &:hover {
+        background: #25d366;
+        border-color: #25d366;
+        color: $color-white;
+      }
+    }
+  }
+}
+
 // ─── Featured products ───────────────────────────────────────────────────────
 .home-products {
   padding: $spacing-xl 0;
