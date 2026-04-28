@@ -9,13 +9,21 @@
   z-index: 1000;
   background: transparent;
   border-bottom: none;
-  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 
   .site-logo-text,
   .nav a {
     color: $color-white;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   }
+}
+
+#header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
 }
 
 #masthead.is-sticky {

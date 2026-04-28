@@ -23,3 +23,16 @@ ul, ol {
   padding-left: $spacing-lg;
   padding-right: $spacing-lg;
 }
+
+// Override Storefront's sidebar layout — this theme has no sidebars
+.right-sidebar .content-area,
+.left-sidebar .content-area,
+.content-area {
+  width: 100%;
+  float: none;
+  margin-right: 0;
+}
+
+.widget-area {
+  display: none;
+}
