@@ -17,35 +17,55 @@
   <?php do_action('storefront_before_header'); ?>
 
   <header id="masthead" class="site-header" role="banner">
-    <div class="col-full">
-      <div id="header-row">
-        <a class="site-logo-text fw-bold fs-4 text-decoration-none" href="<?php echo esc_url(home_url('/')); ?>">
-          <?php bloginfo('name'); ?>
-        </a>
-        <nav id="site-nav" aria-label="Menu principal">
+
+    <div class="header-main">
+      <div class="col-full">
+        <div class="header-main-row">
+
+          <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?>">
+            <?php if (has_custom_logo()) : the_custom_logo(); else : ?>
+              <span class="site-logo-text"><?php bloginfo('name'); ?></span>
+            <?php endif; ?>
+          </a>
+
+          <div class="header-search">
+            <?php get_product_search_form(); ?>
+          </div>
+
+          <div class="header-actions">
+            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link" aria-label="Carrinho">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+              </svg>
+              <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
+              <span class="cart-count"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
+            </a>
+            <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="site-nav" class="header-nav-bar">
+      <div class="col-full">
+        <nav aria-label="Menu principal">
           <?php
             wp_nav_menu([
               'theme_location' => 'primary',
               'container'      => false,
-              'menu_class'     => 'nav gap-1',
+              'menu_class'     => 'nav-menu',
               'fallback_cb'    => false,
             ]);
           ?>
         </nav>
-        <div id="header-actions">
-          <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link text-decoration-none position-relative" aria-label="Carrinho">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </svg>
-            <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
-            <span class="cart-count badge"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
-          </a>
-          <button id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
       </div>
     </div>
+
   </header>
 
   <?php do_action('storefront_before_content'); ?>

@@ -4,6 +4,7 @@ $phone    = get_theme_mod( 'contact_phone', '' );
 $whatsapp = get_theme_mod( 'contact_whatsapp', '' );
 $wa_msg   = get_theme_mod( 'contact_whatsapp_message', 'Olá! Gostaria de saber mais sobre os produtos.' );
 $address  = get_theme_mod( 'contact_address', '' );
+$maps_url = get_theme_mod( 'contact_maps_url', '' );
 $fallback = 'Configure em Aparência &gt; Personalizar';
 
 $icons_uri = get_stylesheet_directory_uri() . '/assets/img/icons/';
@@ -43,7 +44,14 @@ $icons_uri = get_stylesheet_directory_uri() . '/assets/img/icons/';
 				<div class="contact-icon"><img src="<?php echo esc_url( $icons_uri . 'location.png' ); ?>" alt="Localização"></div>
 				<div class="contact-label">Nossa loja física</div>
 				<div class="contact-value">
-					<?php echo $address ? nl2br( esc_html( $address ) ) : $fallback; ?>
+					<?php if ( $address ) : ?>
+						<address class="contact-address"><?php echo nl2br( esc_html( $address ) ); ?></address>
+						<?php if ( $maps_url ) : ?>
+							<a href="<?php echo esc_url( $maps_url ); ?>" class="contact-btn contact-btn--maps" target="_blank" rel="noopener noreferrer">Ver no Maps</a>
+						<?php endif; ?>
+					<?php else : ?>
+						<?php echo $fallback; ?>
+					<?php endif; ?>
 				</div>
 			</div>
 

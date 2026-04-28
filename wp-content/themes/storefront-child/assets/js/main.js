@@ -1,10 +1,21 @@
 (function () {
+  var masthead = document.getElementById('masthead');
+  if (!masthead) return;
+  function updateOffset() {
+    document.documentElement.style.setProperty('--header-h', masthead.offsetHeight + 'px');
+  }
+  updateOffset();
+  window.addEventListener('resize', updateOffset);
+})();
+
+(function () {
   var toggle = document.getElementById('nav-toggle');
   var nav = document.getElementById('site-nav');
   if (toggle && nav) {
     toggle.addEventListener('click', function () {
       var open = nav.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', open);
+      toggle.classList.toggle('is-active', open);
     });
   }
 })();

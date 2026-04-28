@@ -34,6 +34,10 @@ ul, ol {
   padding-right: $spacing-lg;
 }
 
+.site-content {
+  padding-top: var(--header-h, 112px);
+}
+
 // Override Storefront's sidebar layout — this theme has no sidebars
 .right-sidebar .content-area,
 .left-sidebar .content-area,

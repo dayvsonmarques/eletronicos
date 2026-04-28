@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
@@ -203,9 +204,11 @@
 
 // ─── Contact bar ─────────────────────────────────────────────────────────────
 .home-contact {
-  background: $color-dark;
-  color: $color-white;
+  background: $color-white;
+  color: $color-dark;
   padding: $spacing-xl 0;
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
 
   .contact-item {
     display: flex;
@@ -215,13 +218,13 @@
     padding: $spacing-lg $spacing-xl;
 
     & + .contact-item {
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 1px solid $color-border;
     }
 
     @include respond-to(md) {
       padding: $spacing-lg;
       border-left: none !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid $color-border;
 
       &:first-child {
         border-top: none;
@@ -236,8 +239,6 @@
       width: 48px;
       height: 48px;
       object-fit: contain;
-      filter: brightness(0) invert(1);
-      opacity: 0.85;
     }
   }
 
@@ -246,20 +247,30 @@
     font-weight: $font-weight-bold;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.55);
+    color: $color-muted;
     margin-bottom: $spacing-md;
   }
 
   .contact-value {
     font-size: $font-size-base;
-    color: $color-white;
+    color: $color-dark;
     line-height: $line-height-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .contact-address {
+    font-style: normal;
+    color: $color-text;
   }
 
   .contact-btn {
     display: inline-block;
     padding: $spacing-sm $spacing-lg;
-    border: 2px solid rgba(255, 255, 255, 0.6);
+    background: $color-primary;
+    border: none;
     border-radius: $radius-sm;
     color: $color-white;
     font-size: $font-size-sm;
@@ -267,19 +278,26 @@
     transition: $transition-base;
 
     &:hover {
-      background: $color-white;
-      border-color: $color-white;
-      color: $color-dark;
+      background: color.adjust($color-primary, $lightness: -8%);
+      color: $color-white;
     }
 
     &--whatsapp {
-      border-color: #25d366;
-      color: #25d366;
+      background: #25d366;
 
       &:hover {
-        background: #25d366;
-        border-color: #25d366;
-        color: $color-white;
+        background: color.adjust(#25d366, $lightness: -8%);
+      }
+    }
+
+    &--maps {
+      background: $color-white;
+      border: 1.5px solid $color-border;
+      color: $color-dark;
+
+      &:hover {
+        border-color: $color-primary;
+        color: $color-primary;
       }
     }
   }

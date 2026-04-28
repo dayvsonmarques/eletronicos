@@ -39,4 +39,7 @@ add_action('customize_register', function ($wp_customize) {
 
     $wp_customize->add_setting('contact_address', ['default' => '', 'sanitize_callback' => 'sanitize_textarea_field']);
     $wp_customize->add_control('contact_address', ['label' => 'Endereço da loja', 'section' => 'contact_info', 'type' => 'textarea']);
+
+    $wp_customize->add_setting('contact_maps_url', ['default' => '', 'sanitize_callback' => 'esc_url_raw']);
+    $wp_customize->add_control('contact_maps_url', ['label' => 'Link do Google Maps', 'section' => 'contact_info', 'type' => 'url']);
 });
