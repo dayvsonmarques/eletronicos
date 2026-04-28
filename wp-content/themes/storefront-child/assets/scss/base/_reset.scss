@@ -12,6 +12,16 @@ img {
   display: block;
 }
 
+a {
+  text-decoration: none;
+  outline: none;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
 ul, ol {
   padding-left: $spacing-lg;
 }
