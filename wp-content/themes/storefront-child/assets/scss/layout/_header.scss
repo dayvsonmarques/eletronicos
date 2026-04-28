@@ -10,35 +10,25 @@
   z-index: 1000;
   background: $color-white;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid $color-border;
 }
 
-// ── Main row: logo + search + actions ────────────────────────────────────────
+// ── Single header row ─────────────────────────────────────────────────────────
 .header-main {
-  border-bottom: 1px solid $color-border;
+  // intentionally empty wrapper for potential future top-bar
 }
 
 .header-main-row {
   display: flex;
   align-items: center;
-  gap: $spacing-md;
+  gap: $spacing-lg;
   padding: $spacing-sm 0;
   min-height: 68px;
-
-  @include respond-to(md) {
-    flex-wrap: wrap;
-    min-height: auto;
-    row-gap: $spacing-sm;
-
-    .site-logo  { order: 1; }
-    .header-actions { order: 2; margin-left: auto; }
-    .header-search  { order: 3; flex-basis: 100%; padding-bottom: $spacing-sm; }
-  }
 }
 
 // ── Logo ──────────────────────────────────────────────────────────────────────
 .site-logo {
   flex: 0 0 auto;
-  color: $color-dark;
 
   img {
     max-height: 42px;
@@ -54,23 +44,220 @@
   white-space: nowrap;
 }
 
-// ── Search bar (hidden by default, toggled via JS) ────────────────────────────
-.header-search {
+// ── Inline nav (desktop) ──────────────────────────────────────────────────────
+.header-nav {
   flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+
+  nav {
+    display: flex;
+  }
+
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+
+    > li > a {
+      display: block;
+      padding: $spacing-xs $spacing-sm;
+      color: $color-dark;
+      font-size: $font-size-sm;
+      font-weight: 600;
+      white-space: nowrap;
+      border-radius: $radius-sm;
+      transition: color 0.2s ease, background 0.2s ease;
+
+      &:hover {
+        color: $color-primary;
+        background: $color-light;
+      }
+    }
+
+    > li.current-menu-item > a,
+    > li.current_page_item > a {
+      color: $color-primary;
+    }
+  }
+
+  @include respond-to(md) {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: $color-white;
+    border-top: 1px solid $color-border;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+
+    &.is-open {
+      display: block;
+    }
+
+    nav {
+      flex-direction: column;
+    }
+
+    .nav-menu {
+      flex-direction: column;
+      align-items: stretch;
+      padding: $spacing-sm $spacing-lg;
+
+      > li > a {
+        padding: $spacing-sm 0;
+        border-radius: 0;
+        border-bottom: 1px solid $color-border;
+        font-size: $font-size-base;
+        background: none;
+
+        &:hover {
+          color: $color-primary;
+          background: none;
+        }
+      }
+
+      > li:last-child > a {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+// ── Actions (always right-aligned) ───────────────────────────────────────────
+.header-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-left: auto;
+}
+
+// ── Shared icon button style (search toggle + cart) ───────────────────────────
+.header-icon-btn,
+.header-cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: $color-secondary;
+  background: none;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    color: $color-primary;
+    background: $color-light;
+  }
+}
+
+// ── Search toggle icon swap ───────────────────────────────────────────────────
+.header-icon-btn {
+  &[aria-expanded="true"] {
+    color: $color-primary;
+
+    .icon-search { display: none; }
+    .icon-close  { display: block; }
+  }
+
+  .icon-close { display: none; }
+}
+
+// ── Cart badge ────────────────────────────────────────────────────────────────
+.header-cart-link {
+  .cart-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
+    background: $color-primary;
+    color: $color-white;
+    font-size: 0.6rem;
+    font-weight: $font-weight-bold;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+
+    &:empty { display: none; }
+  }
+}
+
+// ── Hamburger (mobile only) ───────────────────────────────────────────────────
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: $spacing-xs;
+  color: $color-secondary;
+  background: none;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  .nav-toggle-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  &.is-active {
+    color: $color-primary;
+    border-color: $color-primary;
+
+    .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+
+  @include respond-to(md) {
+    display: flex;
+  }
+}
+
+// ── Search panel (absolute dropdown) ─────────────────────────────────────────
+.header-search-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: $color-white;
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: $spacing-sm 0;
+  z-index: 998;
 
   &[hidden] { display: none !important; }
 
   form,
-  .woocommerce-product-search,
-  .header-search-form {
+  .header-search-form,
+  .woocommerce-product-search {
     display: flex;
-    width: 100%;
   }
 
   input[type="search"],
   .search-field {
     flex: 1;
-    padding: 0.55rem 1rem;
+    padding: 0.6rem 1rem;
     border: 1.5px solid $color-border;
     border-right: none;
     border-radius: $radius-sm 0 0 $radius-sm;
@@ -90,8 +277,8 @@
 
   button[type="submit"] {
     flex: 0 0 auto;
-    padding: 0 $spacing-md;
-    background: $color-muted;
+    padding: 0 $spacing-lg;
+    background: $color-secondary;
     border: none;
     border-radius: 0 $radius-sm $radius-sm 0;
     color: $color-white;
@@ -102,191 +289,5 @@
     transition: background 0.2s ease;
 
     &:hover { background: $color-dark; }
-  }
-
-  @include respond-to(md) {
-    flex-basis: 100%;
-    order: 3;
-    padding-bottom: $spacing-sm;
-  }
-}
-
-// ── Search/icon toggle button ─────────────────────────────────────────────────
-.header-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: $spacing-xs $spacing-sm;
-  color: $color-secondary;
-  background: none;
-  border: none;
-  border-radius: $radius-sm;
-  cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
-
-  &:hover {
-    color: $color-primary;
-    background: $color-light;
-  }
-
-  &[aria-expanded="true"] {
-    color: $color-primary;
-
-    .icon-search { display: none; }
-    .icon-close  { display: block; }
-  }
-
-  .icon-close { display: none; }
-}
-
-// ── Actions: cart + hamburger ─────────────────────────────────────────────────
-.header-actions {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-}
-
-.header-cart-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: $spacing-xs $spacing-sm;
-  color: $color-dark;
-  border-radius: $radius-sm;
-  transition: color 0.2s ease, background 0.2s ease;
-
-  &:hover {
-    color: $color-primary;
-    background: $color-light;
-  }
-
-  .cart-count {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 18px;
-    height: 18px;
-    background: $color-primary;
-    color: $color-white;
-    font-size: 0.65rem;
-    font-weight: $font-weight-bold;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    line-height: 1;
-
-    &:empty {
-      display: none;
-    }
-  }
-}
-
-// ── Hamburger button ──────────────────────────────────────────────────────────
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  width: 38px;
-  height: 38px;
-  padding: $spacing-xs;
-  background: none;
-  border: 1.5px solid $color-border;
-  border-radius: $radius-sm;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-
-  .nav-toggle-bar {
-    display: block;
-    width: 18px;
-    height: 2px;
-    background: $color-dark;
-    border-radius: 2px;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-
-  &.is-active {
-    border-color: $color-primary;
-
-    .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-toggle-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  }
-
-  @include respond-to(md) {
-    display: flex;
-  }
-}
-
-// ── Nav bar (dark) ────────────────────────────────────────────────────────────
-.header-nav-bar {
-  background: $color-dark;
-
-  nav {
-    display: flex;
-  }
-
-  .nav-menu {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    > li > a {
-      display: block;
-      padding: $spacing-sm $spacing-md;
-      color: rgba(255, 255, 255, 0.88);
-      font-size: $font-size-sm;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s ease, background 0.2s ease;
-
-      &:hover {
-        color: $color-white;
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-
-    > li.current-menu-item > a,
-    > li.current_page_item > a {
-      color: $color-white;
-      background: rgba(255, 255, 255, 0.15);
-    }
-  }
-
-  @include respond-to(md) {
-    display: none;
-    background: $color-white;
-    border-top: 1px solid $color-border;
-
-    &.is-open {
-      display: block;
-    }
-
-    nav {
-      flex-direction: column;
-    }
-
-    .nav-menu {
-      flex-direction: column;
-      align-items: stretch;
-
-      > li > a {
-        color: $color-dark;
-        padding: $spacing-sm 0;
-        border-bottom: 1px solid $color-border;
-        font-size: $font-size-base;
-        background: none;
-
-        &:hover {
-          color: $color-primary;
-          background: none;
-        }
-      }
-    }
   }
 }

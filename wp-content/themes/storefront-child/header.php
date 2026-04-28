@@ -28,8 +28,17 @@
             <?php endif; ?>
           </a>
 
-          <div class="header-search" id="header-search" hidden>
-            <?php get_product_search_form(); ?>
+          <div id="site-nav" class="header-nav">
+            <nav aria-label="Menu principal">
+              <?php
+                wp_nav_menu([
+                  'theme_location' => 'primary',
+                  'container'      => false,
+                  'menu_class'     => 'nav-menu',
+                  'fallback_cb'    => false,
+                ]);
+              ?>
+            </nav>
           </div>
 
           <div class="header-actions">
@@ -59,18 +68,9 @@
       </div>
     </div>
 
-    <div id="site-nav" class="header-nav-bar">
+    <div id="header-search" class="header-search-panel" hidden>
       <div class="col-full">
-        <nav aria-label="Menu principal">
-          <?php
-            wp_nav_menu([
-              'theme_location' => 'primary',
-              'container'      => false,
-              'menu_class'     => 'nav-menu',
-              'fallback_cb'    => false,
-            ]);
-          ?>
-        </nav>
+        <?php get_product_search_form(); ?>
       </div>
     </div>
 
