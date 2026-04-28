@@ -2,19 +2,18 @@
 @use '../abstracts/mixins' as *;
 
 #masthead {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: transparent;
-  border-bottom: none;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  background: $color-white;
+  border-bottom: 1px solid $color-border;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   .site-logo-text,
   .nav a {
-    color: $color-white;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    color: $color-dark;
   }
 }
 
@@ -24,33 +23,4 @@
   justify-content: space-between;
   gap: $spacing-md;
   padding: $spacing-sm 0;
-}
-
-#masthead.is-sticky {
-  position: fixed;
-  background: $color-white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid $color-border;
-
-  .site-logo-text,
-  .nav a {
-    color: $color-dark;
-    text-shadow: none;
-  }
-}
-
-.home #masthead {
-  margin-bottom: 0 !important;
-}
-
-.not-front-page #masthead {
-  position: relative;
-  background: $color-white;
-  border-bottom: 1px solid $color-border;
-
-  .site-logo-text,
-  .nav a {
-    color: $color-dark;
-    text-shadow: none;
-  }
 }
