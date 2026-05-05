@@ -1,0 +1,383 @@
+@use 'sass:color';
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// ── CSS safety layer: hide checkout form for guests ───────────────────────────
+body:not(.logged-in) .checkout.woocommerce-checkout {
+  display: none !important;
+}
+
+// ── Identification gate ───────────────────────────────────────────────────────
+.checkout-id-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-md;
+}
+
+.checkout-id-title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: $spacing-xl;
+}
+
+.checkout-id-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-white;
+}
+
+.checkout-id-panel {
+  padding: $spacing-xl $spacing-lg;
+
+  &:first-child {
+    border-right: 1px solid $color-border;
+  }
+}
+
+.checkout-id-panel__heading {
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $color-dark;
+  margin-bottom: $spacing-lg;
+}
+
+// Left panel – new account form
+.checkout-id-new-form {
+  .checkout-id-field {
+    margin-bottom: $spacing-md;
+
+    input {
+      width: 100%;
+      padding: 0.6rem $spacing-md;
+      border: 1.5px solid $color-border;
+      border-radius: $radius-md;
+      font-size: $font-size-base;
+      color: $color-dark;
+      background: $color-white;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+      }
+    }
+  }
+
+  .checkout-id-submit {
+    width: 100%;
+    padding: 0.65rem;
+    background: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover { background: color.adjust($color-primary, $lightness: -8%); }
+  }
+}
+
+// Right panel – WC login form overrides
+.checkout-id-panel .woocommerce-form-login {
+  .form-row { margin-bottom: $spacing-md; }
+
+  label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-dark;
+    margin-bottom: $spacing-xs;
+  }
+
+  .woocommerce-Input {
+    width: 100%;
+    padding: 0.6rem $spacing-md;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    color: $color-dark;
+    background: $color-white;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+  }
+
+  .woocommerce-form__label-for-checkbox,
+  .woocommerce-form-login__rememberme { display: none; }
+
+  .woocommerce-LostPassword {
+    margin-top: $spacing-sm;
+    font-size: $font-size-sm;
+    text-align: right;
+
+    a { color: $color-muted; &:hover { color: $color-primary; } }
+  }
+
+  .woocommerce-button {
+    width: 100%;
+    padding: 0.65rem;
+    background: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: $spacing-sm;
+
+    &:hover { background: color.adjust($color-primary, $lightness: -8%); }
+  }
+}
+
+// Password show/hide toggle (injected by inline JS)
+.checkout-id-pw-wrap {
+  position: relative;
+
+  input { padding-right: 2.5rem; }
+
+  .checkout-id-pw-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-muted;
+    padding: 0;
+    line-height: 1;
+
+    &:hover { color: $color-dark; }
+  }
+}
+
+// Google section
+.checkout-id-google {
+  border-top: 1px solid $color-border;
+  padding: $spacing-lg;
+  text-align: center;
+  background: $color-white;
+}
+
+.checkout-id-google__label {
+  font-size: $font-size-sm;
+  color: $color-secondary;
+  margin-bottom: $spacing-md;
+}
+
+.checkout-id-google__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: 0.6rem $spacing-lg;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-white;
+  color: $color-dark;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  svg { flex: 0 0 auto; }
+
+  &:hover {
+    border-color: #4285F4;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+    color: $color-dark;
+    text-decoration: none;
+  }
+}
+
+// Mobile
+@include respond-to(md) {
+  .checkout-id-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-id-panel:first-child {
+    border-right: none;
+    border-bottom: 1px solid $color-border;
+  }
+
+  .checkout-id-wrap {
+    padding: $spacing-lg $spacing-md;
+  }
+}
+
+// ── Neutraliza conflito Bootstrap col-1/col-2 vs WooCommerce col-1/col-2 ─────
+// Bootstrap trata .col-1 como 8.33% de grid; WooCommerce usa como "coluna 1/2"
+.woocommerce-checkout {
+  .col2-set {
+    width: 48%;
+    float: left;
+    margin-right: 4%;
+
+    .col-1,
+    .col-2 {
+      width: auto;
+      float: none;
+      flex: none;
+      max-width: none;
+      padding: 0;
+    }
+
+    .form-row-first {
+      width: 47%;
+      float: left;
+      margin-right: 6%;
+    }
+
+    .form-row-last {
+      width: 47%;
+      float: right;
+      margin-right: 0;
+    }
+  }
+
+  // ── Revisão do pedido (coluna direita) ─────────────────────────────────────
+  #order_review_heading,
+  #order_review {
+    float: right;
+    width: 44%;
+  }
+
+  // ── Limpa floats ───────────────────────────────────────────────────────────
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  // ── Campos de formulário ───────────────────────────────────────────────────
+  .form-row {
+    padding: 0;
+    margin-bottom: $spacing-md;
+
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: 600;
+      color: $color-dark;
+      margin-bottom: $spacing-xs;
+    }
+
+    input.input-text,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.6rem $spacing-md;
+      border: 1.5px solid $color-border;
+      border-radius: $radius-md;
+      font-size: $font-size-base;
+      color: $color-dark;
+      background: $color-white;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+      }
+    }
+  }
+
+  // ── Tabela de resumo do pedido ─────────────────────────────────────────────
+  .woocommerce-checkout-review-order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: $spacing-md;
+
+    th, td {
+      padding: $spacing-sm;
+      border-bottom: 1px solid $color-border;
+      font-size: $font-size-sm;
+    }
+
+    tfoot tr:last-child td,
+    tfoot tr:last-child th {
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+    }
+  }
+
+  // ── Métodos de pagamento ────────────────────────────────────────────────────
+  #payment {
+    background: $color-light;
+    border-radius: $radius-md;
+    padding: $spacing-md;
+
+    .payment_methods {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 $spacing-md;
+
+      li {
+        padding: $spacing-sm 0;
+        border-bottom: 1px solid $color-border;
+
+        &:last-child { border-bottom: none; }
+
+        label {
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .payment_box {
+          margin-top: $spacing-sm;
+          font-size: $font-size-sm;
+          color: $color-secondary;
+        }
+      }
+    }
+
+    .place-order {
+      text-align: center;
+
+      #place_order {
+        width: 100%;
+        padding: 0.8rem;
+        background: $color-success;
+        color: $color-white;
+        border: none;
+        border-radius: $radius-md;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover { background: #146c43; }
+      }
+    }
+  }
+
+  // ── Mobile ─────────────────────────────────────────────────────────────────
+  @include respond-to(md) {
+    .col2-set,
+    #order_review_heading,
+    #order_review {
+      width: 100%;
+      float: none;
+      margin-right: 0;
+    }
+
+    .col2-set .form-row-first,
+    .col2-set .form-row-last {
+      width: 100%;
+      float: none;
+      margin-right: 0;
+    }
+  }
+}

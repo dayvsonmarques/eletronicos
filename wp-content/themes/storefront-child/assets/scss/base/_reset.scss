@@ -12,6 +12,16 @@ img {
   display: block;
 }
 
+a {
+  text-decoration: none;
+  outline: none;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
 ul, ol {
   padding-left: $spacing-lg;
 }
@@ -22,4 +32,21 @@ ul, ol {
   margin-right: auto;
   padding-left: $spacing-lg;
   padding-right: $spacing-lg;
+}
+
+.site-content {
+  padding-top: var(--header-h, 112px);
+}
+
+// Override Storefront's sidebar layout — this theme has no sidebars
+.right-sidebar .content-area,
+.left-sidebar .content-area,
+.content-area {
+  width: 100%;
+  float: none;
+  margin-right: 0;
+}
+
+.widget-area {
+  display: none;
 }

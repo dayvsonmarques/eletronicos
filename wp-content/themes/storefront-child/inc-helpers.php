@@ -23,6 +23,17 @@ function eletronicos_category_icon($slug) {
     return $icons[$slug] ?? $default;
 }
 
+add_filter('get_product_search_form', function () {
+    $action = esc_url(home_url('/'));
+    $placeholder = esc_attr__('Buscar produtos...', 'storefront-child');
+    $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.44.658a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>';
+    return '<form role="search" method="get" class="header-search-form" action="' . $action . '">'
+        . '<input type="search" class="search-field" placeholder="' . $placeholder . '" name="s">'
+        . '<input type="hidden" name="post_type" value="product">'
+        . '<button type="submit" aria-label="Buscar">' . $icon . '</button>'
+        . '</form>';
+});
+
 function eletronicos_payment_logos_svg() {
     return [
         'Visa'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#1a1f71"/><text x="28" y="24" text-anchor="middle" fill="white" font-size="16" font-weight="900" font-style="italic" font-family="Arial,sans-serif" letter-spacing="-0.5">VISA</text></svg>',

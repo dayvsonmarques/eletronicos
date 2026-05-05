@@ -17,35 +17,70 @@
   <?php do_action('storefront_before_header'); ?>
 
   <header id="masthead" class="site-header" role="banner">
-    <div class="col-full">
-      <div id="header-row">
-        <a class="site-logo-text fw-bold fs-4 text-decoration-none" href="<?php echo esc_url(home_url('/')); ?>">
-          <?php bloginfo('name'); ?>
-        </a>
-        <nav id="site-nav" aria-label="Menu principal">
-          <?php
-            wp_nav_menu([
-              'theme_location' => 'primary',
-              'container'      => false,
-              'menu_class'     => 'nav gap-1',
-              'fallback_cb'    => false,
-            ]);
-          ?>
-        </nav>
-        <div id="header-actions">
-          <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link text-decoration-none position-relative" aria-label="Carrinho">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </svg>
-            <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
-            <span class="cart-count badge"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
+
+    <div class="header-main">
+      <div class="col-full">
+        <div class="header-main-row">
+
+          <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?>">
+            <?php if (has_custom_logo()) : the_custom_logo(); else : ?>
+              <span class="site-logo-text"><?php bloginfo('name'); ?></span>
+            <?php endif; ?>
           </a>
-          <button id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+
+          <div class="header-actions">
+            <?php
+              $account_url   = is_user_logged_in() ? wc_get_account_endpoint_url('dashboard') : wc_get_page_permalink('myaccount');
+              $account_label = is_user_logged_in() ? 'Minha conta' : 'Login / Cadastro';
+            ?>
+            <a href="<?php echo esc_url($account_url); ?>" class="header-icon-btn" aria-label="<?php echo esc_attr($account_label); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10c-2.029 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+              </svg>
+            </a>
+            <button id="search-toggle" class="header-icon-btn" type="button" aria-label="Buscar" aria-expanded="false" aria-controls="header-search">
+              <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.44.658a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
+              </svg>
+              <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854z"/>
+              </svg>
+            </button>
+            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="header-cart-link" aria-label="Carrinho">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+              </svg>
+              <?php $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
+              <span class="cart-count"><?php echo $count > 0 ? esc_html($count) : ''; ?></span>
+            </a>
+            <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <nav id="site-nav" class="header-nav-bar" aria-label="Menu principal">
+      <?php
+        wp_nav_menu([
+          'theme_location' => 'primary',
+          'container'      => false,
+          'menu_class'     => 'header-menu',
+          'fallback_cb'    => false,
+        ]);
+      ?>
+    </nav>
+
+    <div id="header-search" class="header-search-panel" hidden>
+      <div class="col-full">
+        <?php get_product_search_form(); ?>
+      </div>
+    </div>
+
   </header>
 
   <?php do_action('storefront_before_content'); ?>

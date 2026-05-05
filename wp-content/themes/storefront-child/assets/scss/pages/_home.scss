@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
@@ -197,6 +198,107 @@
       padding: 2px 6px;
       border-radius: $radius-sm;
       margin-bottom: $spacing-xs;
+    }
+  }
+}
+
+// ─── Contact bar ─────────────────────────────────────────────────────────────
+.home-contact {
+  background: $color-white;
+  color: $color-dark;
+  padding: $spacing-xl 0;
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: $spacing-lg $spacing-xl;
+
+    & + .contact-item {
+      border-left: 1px solid $color-border;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-lg;
+      border-left: none !important;
+      border-top: 1px solid $color-border;
+
+      &:first-child {
+        border-top: none;
+      }
+    }
+  }
+
+  .contact-icon {
+    margin-bottom: $spacing-md;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+  }
+
+  .contact-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $color-muted;
+    margin-bottom: $spacing-md;
+  }
+
+  .contact-value {
+    font-size: $font-size-base;
+    color: $color-dark;
+    line-height: $line-height-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .contact-address {
+    font-style: normal;
+    color: $color-text;
+  }
+
+  .contact-btn {
+    display: inline-block;
+    padding: $spacing-sm $spacing-lg;
+    background: $color-primary;
+    border: none;
+    border-radius: $radius-sm;
+    color: $color-white;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    transition: $transition-base;
+
+    &:hover {
+      background: color.adjust($color-primary, $lightness: -8%);
+      color: $color-white;
+    }
+
+    &--whatsapp {
+      background: #25d366;
+
+      &:hover {
+        background: color.adjust(#25d366, $lightness: -8%);
+      }
+    }
+
+    &--maps {
+      background: $color-white;
+      border: 1.5px solid $color-border;
+      color: $color-dark;
+
+      &:hover {
+        border-color: $color-primary;
+        color: $color-primary;
+      }
     }
   }
 }
