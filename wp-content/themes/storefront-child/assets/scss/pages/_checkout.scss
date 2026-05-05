@@ -116,6 +116,14 @@ body:not(.logged-in) .checkout.woocommerce-checkout {
   .woocommerce-form__label-for-checkbox,
   .woocommerce-form-login__rememberme { display: none; }
 
+  .woocommerce-LostPassword {
+    margin-top: $spacing-sm;
+    font-size: $font-size-sm;
+    text-align: right;
+
+    a { color: $color-muted; &:hover { color: $color-primary; } }
+  }
+
   .woocommerce-button {
     width: 100%;
     padding: 0.65rem;
@@ -153,14 +161,6 @@ body:not(.logged-in) .checkout.woocommerce-checkout {
 
     &:hover { color: $color-dark; }
   }
-}
-
-.checkout-id-lostpass {
-  margin-top: $spacing-sm;
-  font-size: $font-size-sm;
-  text-align: right;
-
-  a { color: $color-muted; &:hover { color: $color-primary; } }
 }
 
 // Google section

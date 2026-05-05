@@ -42,9 +42,6 @@ if (!is_user_logged_in()) {
             'hidden'   => false,
           ]);
           ?>
-          <p class="checkout-id-lostpass">
-            <a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php esc_html_e('Esqueci minha senha', 'storefront-child'); ?></a>
-          </p>
         </div>
 
       </div>
