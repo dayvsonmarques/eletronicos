@@ -135,6 +135,6 @@ add_action('template_redirect', function () {
     $redirect_after = get_transient('eletronicos_google_redirect_' . $state);
     delete_transient('eletronicos_google_redirect_' . $state);
 
-    wp_redirect($redirect_after ?: wc_get_account_endpoint_url('dashboard'));
+    wp_redirect(wp_validate_redirect($redirect_after ?: wc_get_account_endpoint_url('dashboard'), wc_get_account_endpoint_url('dashboard')));
     exit;
 });
