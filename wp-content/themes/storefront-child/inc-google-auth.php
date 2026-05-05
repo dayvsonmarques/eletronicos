@@ -1,10 +1,14 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-function eletronicos_google_auth_url() {
+function eletronicos_google_auth_url($redirect = '') {
     $client_id    = get_option('eletronicos_google_client_id', '');
     $redirect_uri = home_url('/google-auth-callback/');
     $state        = wp_create_nonce('eletronicos_google_state');
+
+    if ($redirect) {
+        set_transient('eletronicos_google_redirect_' . $state, esc_url_raw($redirect), 5 * MINUTE_IN_SECONDS);
+    }
 
     return 'https://accounts.google.com/o/oauth2/auth?' . http_build_query([
         'client_id'     => $client_id,
@@ -128,6 +132,9 @@ add_action('template_redirect', function () {
     wp_set_auth_cookie($user->ID, true);
     do_action('wp_login', $user->user_login, $user);
 
-    wp_redirect(wc_get_account_endpoint_url('dashboard'));
+    $redirect_after = get_transient('eletronicos_google_redirect_' . $state);
+    delete_transient('eletronicos_google_redirect_' . $state);
+
+    wp_redirect($redirect_after ?: wc_get_account_endpoint_url('dashboard'));
     exit;
 });
