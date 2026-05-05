@@ -64,3 +64,6 @@ add_action('init', function () {
     }
     update_option('eletronicos_pages_v1_created', true);
 }, 1);
+
+add_filter('woocommerce_checkout_registration_required', '__return_true');
+add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
