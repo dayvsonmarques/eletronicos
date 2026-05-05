@@ -67,3 +67,12 @@ add_action('init', function () {
 
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
+
+add_action('woocommerce_register_form_start', function () {
+    if (!empty($_GET['email'])) {
+        $prefill = sanitize_email(wp_unslash($_GET['email']));
+        if (is_email($prefill)) {
+            echo '<script>document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("reg_email");if(f&&!f.value)f.value=' . wp_json_encode($prefill) . ';});</script>';
+        }
+    }
+});

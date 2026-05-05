@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 if (!is_user_logged_in()) {
     $google_client_id = get_option('eletronicos_google_client_id', '');
-    $register_url     = add_query_arg('action', 'register', wc_get_page_permalink('myaccount'));
+    $register_url     = wc_get_page_permalink('myaccount');
     ?>
     <div class="checkout-id-wrap">
 
