@@ -19,6 +19,10 @@ add_action('wp_enqueue_scripts', function () {
             wp_add_inline_style('storefront-child-main', '.home-promo-banner{background-image:url(' . esc_url($pb_image) . ')}');
         }
     }
+
+    if (is_checkout()) {
+        wp_enqueue_script('storefront-checkout', get_stylesheet_directory_uri() . '/assets/js/checkout.js', ['jquery'], '1.0.0', true);
+    }
 });
 
 add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
@@ -64,6 +68,17 @@ add_action('init', function () {
     }
     update_option('eletronicos_pages_v1_created', true);
 }, 1);
+
+add_filter('woocommerce_checkout_get_value', function ($value, $input) {
+    if ($value || !is_user_logged_in()) return $value;
+    $user = wp_get_current_user();
+    $map  = [
+        'billing_first_name' => $user->first_name,
+        'billing_last_name'  => $user->last_name,
+        'billing_email'      => $user->user_email,
+    ];
+    return $map[$input] ?? $value;
+}, 10, 2);
 
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
