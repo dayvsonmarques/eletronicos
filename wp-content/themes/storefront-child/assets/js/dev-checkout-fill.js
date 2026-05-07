@@ -15,12 +15,12 @@
     billing_first_name: 'Dayvson',
     billing_last_name:  'Marques',
     billing_country:    'BR',
-    billing_address_1:  'Avenida Paulista, 1578',
-    billing_address_2:  '10º Andar',
-    billing_postcode:   '01310-200',
-    billing_city:       'São Paulo',
-    billing_state:      'SP',
-    billing_phone:      '(11) 98765-4321',
+    billing_address_1:  'Rua do Bom Jesus, 197',
+    billing_address_2:  'Apto 12',
+    billing_postcode:   '50030-170',
+    billing_city:       'Recife',
+    billing_state:      'PE',
+    billing_phone:      '(81) 98765-4321',
     billing_email:      'dayvson.marques@gmail.com',
   };
 
