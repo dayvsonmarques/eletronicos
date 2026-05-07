@@ -1,11 +1,10 @@
 /**
- * DEV ONLY — Checkout test data filler
+ * DEV ONLY — Checkout test data filler (Asaas)
  *
- * Paste in the browser console on /finalizar-compra/ to auto-fill billing
- * fields with fake data. A floating panel shows Stripe test card details.
+ * Paste in the browser console on /finalizar-compra/ to auto-fill all
+ * checkout fields with fake test data, including Asaas credit card fields.
  *
- * Stripe card fields live inside iframes and cannot be filled via JS.
- * Use the test card shown in the panel to complete payment.
+ * Asaas sandbox test card: 5162306219378829 (Mastercard — always approved)
  *
  * DO NOT enqueue this file in production.
  */
@@ -13,10 +12,10 @@
 (function ($) {
   'use strict';
 
-  // ── Billing data ────────────────────────────────────────────────────────────
+  // ── Dados fictícios ──────────────────────────────────────────────────────────
   var billing = {
-    billing_first_name: 'João',
-    billing_last_name:  'Silva',
+    billing_first_name: 'Dayvson',
+    billing_last_name:  'Marques',
     billing_country:    'BR',
     billing_address_1:  'Avenida Paulista, 1578',
     billing_address_2:  '10º Andar',
@@ -24,79 +23,96 @@
     billing_city:       'São Paulo',
     billing_state:      'SP',
     billing_phone:      '(11) 98765-4321',
-    billing_email:      'teste@exemplo.com.br',
+    billing_email:      'dayvson.marques@gmail.com',
   };
 
-  // Fill fields — trigger only 'change' on postcode to skip CEP autocomplete
+  // CPF fictício válido e campos brasileiros extras
+  var extra = {
+    billing_persontype: '1',              // 1 = Pessoa Física
+    billing_cpf:        '529.982.247-25',
+    billing_birthdate:  '01/01/1990',
+  };
+
+  // Cartão de teste Asaas sandbox (Mastercard — sempre aprovado)
+  var card = {
+    name:   'DAYVSON MARQUES',
+    number: '5162306219378829', // sem espaços — IMask formata
+    month:  '12',
+    year:   '2030',
+    cvv:    '318',
+  };
+
+  // ── Fase 1: preenche billing ─────────────────────────────────────────────────
   Object.keys(billing).forEach(function (id) {
     var $el = $('#' + id);
     if (!$el.length) return;
+    // Não dispara 'input' no CEP para não acionar o autocomplete de endereço
     $el.val(billing[id]).trigger(id === 'billing_postcode' ? 'change' : 'input change');
   });
 
-  // Select Stripe (or first available payment method)
-  var $stripe = $('input[name="payment_method"][value*="stripe"]');
-  var $payment = $stripe.length ? $stripe : $('input[name="payment_method"]').first();
-  if ($payment.length) {
-    $payment.prop('checked', true).trigger('change');
+  // Campos extras brasileiros
+  $('#billing_persontype').val(extra.billing_persontype).trigger('change');
+  $('#billing_cpf').val(extra.billing_cpf).trigger('input change');
+  $('#billing_birthdate').val(extra.billing_birthdate).trigger('input change');
+
+  // Seleciona cartão de crédito Asaas
+  var $asaas = $('input[name="payment_method"][value="asaas-credit-card"]');
+  if ($asaas.length) {
+    $asaas.prop('checked', true).trigger('change');
   }
 
-  $('body').trigger('update_checkout');
+  // ── Fase 2: preenche cartão após WC atualizar o checkout ────────────────────
+  function fillCard() {
+    var fields = [
+      { id: 'asaas-cc-name',             val: card.name   },
+      { id: 'asaas-cc-number',           val: card.number },
+      { id: 'asaas-cc-expiration-month', val: card.month  },
+      { id: 'asaas-cc-expiration-year',  val: card.year   },
+      { id: 'asaas-cc-security-code',    val: card.cvv    },
+    ];
 
-  // ── Floating test card panel ────────────────────────────────────────────────
-  var card = {
-    number:  '4242 4242 4242 4242',
-    expiry:  '12 / 30',
-    cvc:     '123',
-    name:    'JOAO SILVA',
-  };
+    var found = 0;
+    fields.forEach(function (f) {
+      var el = document.getElementById(f.id);
+      if (!el) return;
+      found++;
+      el.value = f.val;
+      // Dispara 'input' para que IMask processe e formate o valor
+      el.dispatchEvent(new Event('input',  { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
 
-  var panelId = '__dev_card_panel';
-  $('#' + panelId).remove();
+    return found;
+  }
 
-  var rows = [
-    ['Número',      card.number,  'number'],
-    ['Validade',    card.expiry,  'expiry'],
-    ['CVC',         card.cvc,     'cvc'],
-    ['Nome',        card.name,    'name'],
-  ];
+  // Aguarda updated_checkout (WC dispara após renderizar campos de pagamento)
+  $(document).one('updated_checkout', function () {
+    // Re-seleciona o método (WC pode ter resetado após o update)
+    if ($asaas.length) {
+      $('input[name="payment_method"][value="asaas-credit-card"]')
+        .prop('checked', true).trigger('change');
+    }
 
-  var rowsHtml = rows.map(function (r) {
-    return '<tr>' +
-      '<td style="padding:4px 8px 4px 0;color:#6b7280;white-space:nowrap;font-size:11px;">' + r[0] + '</td>' +
-      '<td style="padding:4px 0;font-family:monospace;letter-spacing:.05em;">' + r[1] + '</td>' +
-      '<td style="padding:4px 0 4px 8px;">' +
-        '<button data-val="' + r[1] + '" style="font-size:10px;padding:1px 6px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:4px;cursor:pointer;color:#374151;" onclick="navigator.clipboard.writeText(this.dataset.val).then(function(){var b=this;b.textContent=\'✓\';setTimeout(function(){b.textContent=\'Copiar\'},1200)}.bind(this))">Copiar</button>' +
-      '</td>' +
-    '</tr>';
-  }).join('');
+    var filled = fillCard();
 
-  var $panel = $('<div id="' + panelId + '"></div>').css({
-    position:     'fixed',
-    bottom:       '20px',
-    right:        '20px',
-    zIndex:       99999,
-    background:   '#ffffff',
-    border:       '1px solid #e5e7eb',
-    borderRadius: '10px',
-    boxShadow:    '0 4px 20px rgba(0,0,0,.12)',
-    padding:      '14px 16px',
-    fontFamily:   'system-ui,sans-serif',
-    fontSize:     '13px',
-    minWidth:     '260px',
-    color:        '#111827',
+    // Se os campos de cartão ainda não estavam no DOM, tenta após 500 ms
+    if (!filled) {
+      setTimeout(fillCard, 500);
+    }
+
+    console.log(
+      '%c[DEV] Checkout preenchido com dados fictícios — Asaas sandbox',
+      'color:#16a34a;font-weight:bold;font-size:13px;'
+    );
+    console.table({
+      'Cartão':   card.number,
+      'Validade': card.month + '/' + card.year,
+      'CVV':      card.cvv,
+      'CPF':      extra.billing_cpf,
+    });
   });
 
-  $panel.html(
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
-      '<strong style="font-size:12px;color:#374151;">🧪 Cartão de teste (Stripe)</strong>' +
-      '<button onclick="document.getElementById(\'' + panelId + '\').remove()" style="background:none;border:none;cursor:pointer;color:#9ca3af;font-size:16px;line-height:1;padding:0;">×</button>' +
-    '</div>' +
-    '<table style="border-collapse:collapse;width:100%;">' + rowsHtml + '</table>' +
-    '<p style="margin:10px 0 0;font-size:10px;color:#9ca3af;">Campos de billing preenchidos automaticamente.</p>'
-  );
+  // Dispara update_checkout para renderizar campos do gateway selecionado
+  $('body').trigger('update_checkout');
 
-  $('body').append($panel);
-
-  console.log('%c[DEV] Checkout preenchido — use o cartão Stripe 4242 4242 4242 4242', 'color:#2563eb;font-weight:bold;');
 }(jQuery));
