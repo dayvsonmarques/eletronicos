@@ -30,136 +30,144 @@
     billing_birthdate:  '01/01/1990',
   };
 
-  // Cartão Asaas sandbox — Mastercard sempre aprovado
-  var cardFields = {
-    'asaas-cc-name':             'DAYVSON MARQUES',
-    'asaas-cc-number':           '5162 3062 1937 8829', // pré-formatado para o IMask
-    'asaas-cc-expiration-month': '12',
-    'asaas-cc-expiration-year':  '2030',
-    'asaas-cc-security-code':    '318',
+  // Asaas sandbox — Mastercard sempre aprovado
+  // rawCard: valores limpos enviados no POST
+  // fmtCard: valores formatados exibidos nos inputs (IMask aceita formato)
+  var rawCard = {
+    asaas_cc_name:             'DAYVSON MARQUES',
+    asaas_cc_number:           '5162306219378829',
+    asaas_cc_expiration_month: '12',
+    asaas_cc_expiration_year:  '2030',
+    asaas_cc_security_code:    '318',
   };
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
-  // Preenche um input contornando o value setter do IMask v7
-  var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
-
-  function setInput(el, value) {
-    if (!el) return false;
-    nativeSetter.call(el, value);
-    // InputEvent com insertFromPaste é o inputType que IMask aceita para entrada programática
-    el.dispatchEvent(new InputEvent('input',  { bubbles: true, inputType: 'insertFromPaste', data: value }));
+  // Preenche campo sem máscara (billing)
+  function setBillingField(el, value) {
+    if (!el) return;
+    el.value = value;
+    el.dispatchEvent(new Event('input',  { bubbles: true }));
     el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  // Preenche campo com IMask:
+  //   1. Foca o elemento (IMask verifica activeElement internamente)
+  //   2. Seleciona todo o conteúdo existente
+  //   3. execCommand('insertText') gera evento input com isTrusted=true
+  //      que o IMask processa exatamente como digitação do usuário
+  function setIMaskField(el, value) {
+    if (!el) return false;
+    el.focus();
+    el.select();
+    var ok = document.execCommand('insertText', false, value);
+    if (!ok) {
+      // Fallback para navegadores que bloqueiam execCommand
+      var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+      nativeSetter.call(el, value);
+      el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertFromPaste' }));
+    }
     return true;
   }
 
-  // ── Fase 1: preenche billing ─────────────────────────────────────────────────
+  // ── Fase 1: billing ──────────────────────────────────────────────────────────
   Object.keys(billing).forEach(function (id) {
     var el = document.getElementById(id);
     if (!el) return;
     if (id === 'billing_postcode') {
-      // Apenas 'change' — evita disparar o autocomplete de CEP
       el.value = billing[id];
       el.dispatchEvent(new Event('change', { bubbles: true }));
     } else {
-      setInput(el, billing[id]);
+      setBillingField(el, billing[id]);
     }
   });
 
-  setInput(document.getElementById('billing_persontype'), extra.billing_persontype);
-  setInput(document.getElementById('billing_cpf'),        extra.billing_cpf);
-  setInput(document.getElementById('billing_birthdate'),  extra.billing_birthdate);
+  setBillingField(document.getElementById('billing_persontype'), extra.billing_persontype);
+  setBillingField(document.getElementById('billing_cpf'),        extra.billing_cpf);
+  setBillingField(document.getElementById('billing_birthdate'),  extra.billing_birthdate);
 
-  // ── Fase 2: seleciona Asaas ANTES de triggerar update_checkout ───────────────
-  // Crítico: o AJAX do WC serializa o form no momento do trigger.
-  // Se Asaas não estiver selecionado, o AJAX retorna sem os campos do cartão.
-  var $asaasRadio = $('input[name="payment_method"][value="asaas-credit-card"]');
-  if ($asaasRadio.length) {
-    $asaasRadio.prop('checked', true).trigger('change');
-  }
+  // ── Fase 2: seleciona Asaas ANTES do update_checkout ────────────────────────
+  // O WC serializa o form no momento do trigger — Asaas deve estar selecionado
+  // para o AJAX retornar os campos do cartão.
+  $('input[name="payment_method"][value="asaas-credit-card"]')
+    .prop('checked', true).trigger('change');
 
-  // ── Fase 3: preenche os campos do cartão ─────────────────────────────────────
-  function fillCard() {
+  // ── Fase 3: intercepta submissão AJAX — garantia definitiva ─────────────────
+  // Independente do estado visual dos inputs, injeta os valores corretos
+  // diretamente no payload enviado ao servidor.
+  $(document).on('ajaxSend.devFill', function (_event, _jqxhr, settings) {
+    if (!settings.url || settings.url.indexOf('wc-ajax=checkout') === -1) return;
+    if (!settings.data) return;
+    var extra = Object.keys(rawCard).map(function (key) {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(rawCard[key]);
+    }).join('&');
+    settings.data += '&' + extra;
+  });
+
+  // ── Fase 4: preenche inputs visualmente ─────────────────────────────────────
+  // Mapeamento: id HTML → chave em rawCard
+  var cardIdMap = {
+    'asaas-cc-name':             'asaas_cc_name',
+    'asaas-cc-number':           'asaas_cc_number',
+    'asaas-cc-expiration-month': 'asaas_cc_expiration_month',
+    'asaas-cc-expiration-year':  'asaas_cc_expiration_year',
+    'asaas-cc-security-code':    'asaas_cc_security_code',
+  };
+
+  function fillCardVisual() {
     var filled = 0;
-    Object.keys(cardFields).forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      // Tenta via nativeSetter + InputEvent primeiro
-      if (!setInput(el, cardFields[id])) return;
-      // Fallback: força o valor direto caso IMask tenha resetado
-      if (el.value === '') el.value = cardFields[id];
+    Object.keys(cardIdMap).forEach(function (id) {
+      var el  = document.getElementById(id);
+      var val = rawCard[cardIdMap[id]];
+      if (!el || !val) return;
+      // Nome não tem máscara — set direto
+      if (id === 'asaas-cc-name') {
+        el.value = val;
+      } else {
+        setIMaskField(el, val);
+      }
       filled++;
     });
     return filled;
   }
 
-  // ── Fase 4: MutationObserver — re-preenche se o WC re-renderizar ─────────────
-  // O WC substitui o HTML de #payment após cada update_checkout AJAX.
-  // O observer detecta a troca e re-preenche automaticamente.
-  var cardObserver = null;
-
-  function watchPaymentSection() {
-    if (cardObserver) return;
+  // MutationObserver: re-preenche se WC re-renderizar o bloco de pagamento
+  function watchPayment() {
     var paymentDiv = document.getElementById('payment');
-    if (!paymentDiv) return;
+    if (!paymentDiv || paymentDiv._devObserver) return;
+    paymentDiv._devObserver = true;
 
-    cardObserver = new MutationObserver(function (mutations) {
-      var hasRelevantChange = mutations.some(function (m) {
-        return m.type === 'childList' && m.addedNodes.length > 0;
-      });
-      if (!hasRelevantChange) return;
-
-      // Aguarda o IMask inicializar nos novos inputs antes de preencher
+    new MutationObserver(function (mutations) {
+      var added = mutations.some(function (m) { return m.addedNodes.length > 0; });
+      if (!added) return;
       setTimeout(function () {
-        // Re-seleciona Asaas caso o WC tenha alternado o método
-        var $r = $('input[name="payment_method"][value="asaas-credit-card"]');
-        if ($r.length && !$r.is(':checked')) {
-          $r.prop('checked', true).trigger('change');
-        }
-        var n = fillCard();
-        if (n > 0) {
-          console.log('%c[DEV] Re-preencheu ' + n + '/5 campos do cartão após re-render', 'color:#0ea5e9');
-        }
-      }, 150);
-    });
-
-    cardObserver.observe(paymentDiv, { childList: true, subtree: true });
+        $('input[name="payment_method"][value="asaas-credit-card"]')
+          .prop('checked', true).trigger('change');
+        fillCardVisual();
+      }, 200);
+    }).observe(paymentDiv, { childList: true, subtree: true });
   }
 
-  // ── Fase 5: polling até os campos do cartão aparecerem no DOM ────────────────
-  var attempts = 0;
-
+  // Polling: aguarda os campos do cartão estarem no DOM
+  var tries = 0;
   function poll() {
-    attempts++;
-
-    var ccEl = document.getElementById('asaas-cc-number');
-    if (ccEl) {
-      // Aguarda 150 ms para o IMask inicializar antes de preencher
+    tries++;
+    if (document.getElementById('asaas-cc-number')) {
       setTimeout(function () {
-        var n = fillCard();
-        watchPaymentSection();
+        var n = fillCardVisual();
+        watchPayment();
         console.log(
-          '%c[DEV] Checkout preenchido — ' + n + '/5 campos do cartão OK',
-          'color:#16a34a;font-weight:bold;font-size:13px;'
+          '%c[DEV] Checkout OK — ' + n + '/5 campos do cartão preenchidos visualmente\n' +
+          '       Interceptor ajaxSend ativo — valores corretos garantidos na submissão.',
+          'color:#16a34a;font-weight:bold;font-size:12px;'
         );
-        console.table({
-          'Número':   cardFields['asaas-cc-number'],
-          'Mês/Ano':  cardFields['asaas-cc-expiration-month'] + '/' + cardFields['asaas-cc-expiration-year'],
-          'CVV':      cardFields['asaas-cc-security-code'],
-          'CPF':      extra.billing_cpf,
-        });
-      }, 150);
+      }, 200);
       return;
     }
-
-    if (attempts <= 30) { // até 6 s (30 × 200 ms)
-      setTimeout(poll, 200);
-    } else {
-      console.warn('[DEV] #asaas-cc-number não encontrado após 6 s. O método Asaas está ativo no sandbox?');
-    }
+    if (tries <= 30) setTimeout(poll, 200);
+    else console.warn('[DEV] #asaas-cc-number não encontrado. Asaas ativo no sandbox?');
   }
 
-  // Dispara update_checkout com Asaas já selecionado
   $('body').trigger('update_checkout');
   setTimeout(poll, 500);
 
