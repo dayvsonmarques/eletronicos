@@ -1,10 +1,8 @@
 /**
  * DEV ONLY — Checkout test data filler (Asaas)
  *
- * Paste in the browser console on /finalizar-compra/ to auto-fill all
- * checkout fields with fake test data, including Asaas credit card fields.
- *
- * Asaas sandbox test card: 5162306219378829 (Mastercard — always approved)
+ * Paste in browser console on /finalizar-compra/:
+ *   fetch('/wp-content/themes/storefront-child/assets/js/dev-checkout-fill.js').then(r=>r.text()).then(eval)
  *
  * DO NOT enqueue this file in production.
  */
@@ -26,93 +24,108 @@
     billing_email:      'dayvson.marques@gmail.com',
   };
 
-  // CPF fictício válido e campos brasileiros extras
   var extra = {
     billing_persontype: '1',              // 1 = Pessoa Física
     billing_cpf:        '529.982.247-25',
     billing_birthdate:  '01/01/1990',
   };
 
-  // Cartão de teste Asaas sandbox (Mastercard — sempre aprovado)
+  // Cartão Asaas sandbox — Mastercard sempre aprovado
   var card = {
-    name:   'DAYVSON MARQUES',
-    number: '5162306219378829', // sem espaços — IMask formata
-    month:  '12',
-    year:   '2030',
-    cvv:    '318',
+    'asaas-cc-name':             'DAYVSON MARQUES',
+    'asaas-cc-number':           '5162306219378829',
+    'asaas-cc-expiration-month': '12',
+    'asaas-cc-expiration-year':  '2030',
+    'asaas-cc-security-code':    '318',
   };
 
-  // ── Fase 1: preenche billing ─────────────────────────────────────────────────
-  Object.keys(billing).forEach(function (id) {
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+
+  // Setter nativo do HTMLInputElement — funciona com IMask v7 e React-controlled inputs
+  var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+
+  function setField(el, value) {
+    if (!el) return false;
+    nativeSetter.call(el, value);
+    el.dispatchEvent(new InputEvent('input',  { bubbles: true, inputType: 'insertText' }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    return true;
+  }
+
+  function setJqField(id, value) {
     var $el = $('#' + id);
-    if (!$el.length) return;
-    // Não dispara 'input' no CEP para não acionar o autocomplete de endereço
-    $el.val(billing[id]).trigger(id === 'billing_postcode' ? 'change' : 'input change');
-  });
-
-  // Campos extras brasileiros
-  $('#billing_persontype').val(extra.billing_persontype).trigger('change');
-  $('#billing_cpf').val(extra.billing_cpf).trigger('input change');
-  $('#billing_birthdate').val(extra.billing_birthdate).trigger('input change');
-
-  // Seleciona cartão de crédito Asaas
-  var $asaas = $('input[name="payment_method"][value="asaas-credit-card"]');
-  if ($asaas.length) {
-    $asaas.prop('checked', true).trigger('change');
+    if (!$el.length) return false;
+    $el.val(value).trigger('change');
+    return true;
   }
 
-  // ── Fase 2: preenche cartão após WC atualizar o checkout ────────────────────
+  // ── Fase 1: preenche billing imediatamente ───────────────────────────────────
+  Object.keys(billing).forEach(function (id) {
+    // Não dispara 'input' no CEP para não acionar o autocomplete
+    if (id === 'billing_postcode') {
+      setJqField(id, billing[id]);
+    } else {
+      setField(document.getElementById(id), billing[id]);
+    }
+  });
+
+  setField(document.getElementById('billing_persontype'), extra.billing_persontype);
+  setField(document.getElementById('billing_cpf'),        extra.billing_cpf);
+  setField(document.getElementById('billing_birthdate'),  extra.billing_birthdate);
+
+  // ── Fase 2: seleciona Asaas e aguarda campos do cartão aparecerem ────────────
+  function selectAsaas() {
+    var $radio = $('input[name="payment_method"][value="asaas-credit-card"]');
+    if ($radio.length && !$radio.is(':checked')) {
+      $radio.prop('checked', true).trigger('change');
+      return true; // mudou — WC vai disparar update_checkout
+    }
+    return false;
+  }
+
   function fillCard() {
-    var fields = [
-      { id: 'asaas-cc-name',             val: card.name   },
-      { id: 'asaas-cc-number',           val: card.number },
-      { id: 'asaas-cc-expiration-month', val: card.month  },
-      { id: 'asaas-cc-expiration-year',  val: card.year   },
-      { id: 'asaas-cc-security-code',    val: card.cvv    },
-    ];
-
-    var found = 0;
-    fields.forEach(function (f) {
-      var el = document.getElementById(f.id);
-      if (!el) return;
-      found++;
-      el.value = f.val;
-      // Dispara 'input' para que IMask processe e formate o valor
-      el.dispatchEvent(new Event('input',  { bubbles: true }));
-      el.dispatchEvent(new Event('change', { bubbles: true }));
+    var success = 0;
+    Object.keys(card).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && setField(el, card[id])) success++;
     });
-
-    return found;
+    return success;
   }
 
-  // Aguarda updated_checkout (WC dispara após renderizar campos de pagamento)
-  $(document).one('updated_checkout', function () {
-    // Re-seleciona o método (WC pode ter resetado após o update)
-    if ($asaas.length) {
-      $('input[name="payment_method"][value="asaas-credit-card"]')
-        .prop('checked', true).trigger('change');
+  // Polling: tenta preencher o cartão até 4 s após os campos aparecerem no DOM
+  var attempts = 0;
+  var maxAttempts = 20; // 20 × 200 ms = 4 s
+
+  function poll() {
+    attempts++;
+
+    selectAsaas();
+
+    var ccNumber = document.getElementById('asaas-cc-number');
+    if (ccNumber) {
+      var filled = fillCard();
+      console.log(
+        '%c[DEV] Checkout OK — ' + filled + '/5 campos do cartão preenchidos',
+        'color:#16a34a;font-weight:bold;font-size:13px;'
+      );
+      console.table({
+        'Cartão (Asaas sandbox)': card['asaas-cc-number'],
+        'Validade': card['asaas-cc-expiration-month'] + '/' + card['asaas-cc-expiration-year'],
+        'CVV': card['asaas-cc-security-code'],
+        'CPF': extra.billing_cpf,
+      });
+      return; // sucesso
     }
 
-    var filled = fillCard();
-
-    // Se os campos de cartão ainda não estavam no DOM, tenta após 500 ms
-    if (!filled) {
-      setTimeout(fillCard, 500);
+    if (attempts < maxAttempts) {
+      setTimeout(poll, 200);
+    } else {
+      console.warn('[DEV] Campos do cartão Asaas não encontrados após 4s. Verifique se "Cartão de crédito Asaas" está ativo.');
     }
+  }
 
-    console.log(
-      '%c[DEV] Checkout preenchido com dados fictícios — Asaas sandbox',
-      'color:#16a34a;font-weight:bold;font-size:13px;'
-    );
-    console.table({
-      'Cartão':   card.number,
-      'Validade': card.month + '/' + card.year,
-      'CVV':      card.cvv,
-      'CPF':      extra.billing_cpf,
-    });
-  });
-
-  // Dispara update_checkout para renderizar campos do gateway selecionado
+  // Dispara o update_checkout e inicia o polling logo depois
   $('body').trigger('update_checkout');
+  setTimeout(poll, 600);
 
 }(jQuery));
