@@ -80,6 +80,13 @@ add_filter('woocommerce_checkout_get_value', function ($value, $input) {
     return $map[$input] ?? $value;
 }, 10, 2);
 
+add_filter('gettext', function ($translation, $text, $domain) {
+    if ($domain === 'woocommerce' && $text === 'Username or email') {
+        return 'Usuário ou email';
+    }
+    return $translation;
+}, 10, 3);
+
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
 
