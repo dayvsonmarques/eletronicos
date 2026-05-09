@@ -2,7 +2,7 @@
  * DEV ONLY — Checkout test data filler (Asaas)
  *
  * Paste in browser console on /finalizar-compra/:
- *   fetch('/wp-content/themes/storefront-child/assets/js/dev-checkout-fill.js').then(r=>r.text()).then(eval)
+ *   fetch('/wp-content/themes/storefront-child/assets/js/dev-checkout-fill.js?v='+Date.now()).then(r=>r.text()).then(eval)
  *
  * DO NOT enqueue this file in production.
  */
@@ -163,8 +163,15 @@
       }, 200);
       return;
     }
-    if (tries <= 30) setTimeout(poll, 200);
-    else console.warn('[DEV] #asaas-cc-number não encontrado. Asaas ativo no sandbox?');
+    if (tries === 1) {
+      console.log('[DEV] Aguardando campos do cartão Asaas no DOM...');
+    }
+    if (tries <= 30) {
+      setTimeout(poll, 200);
+    } else {
+      var paymentMethods = Array.from(document.querySelectorAll('input[name="payment_method"]')).map(function (el) { return el.value; });
+      console.warn('[DEV] #asaas-cc-number não encontrado após 6s.\n  Métodos de pagamento no DOM: ' + (paymentMethods.join(', ') || 'nenhum'));
+    }
   }
 
   $('body').trigger('update_checkout');
