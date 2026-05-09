@@ -31,15 +31,13 @@
     billing_birthdate:  '01/01/1990',
   };
 
-  // Asaas sandbox — Mastercard sempre aprovado
-  // rawCard: valores limpos enviados no POST
-  // fmtCard: valores formatados exibidos nos inputs (IMask aceita formato)
+  // Asaas sandbox — cartão oficial aprovado (docs.asaas.com/docs/testing-credit-card-payment)
   var rawCard = {
     asaas_cc_name:             'DAYVSON MARQUES',
-    asaas_cc_number:           '5162306219378829',
+    asaas_cc_number:           '4444444444444444',
     asaas_cc_expiration_month: '12',
     asaas_cc_expiration_year:  '2030',
-    asaas_cc_security_code:    '318',
+    asaas_cc_security_code:    '123',
   };
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
