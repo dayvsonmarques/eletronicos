@@ -50,22 +50,13 @@
     el.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
-  // Preenche campo com IMask:
-  //   1. Foca o elemento (IMask verifica activeElement internamente)
-  //   2. Seleciona todo o conteúdo existente
-  //   3. execCommand('insertText') gera evento input com isTrusted=true
-  //      que o IMask processa exatamente como digitação do usuário
+  var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+
   function setIMaskField(el, value) {
     if (!el) return false;
     el.focus();
-    el.select();
-    var ok = document.execCommand('insertText', false, value);
-    if (!ok) {
-      // Fallback para navegadores que bloqueiam execCommand
-      var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
-      nativeSetter.call(el, value);
-      el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertFromPaste' }));
-    }
+    nativeSetter.call(el, value);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
     return true;
   }
 
