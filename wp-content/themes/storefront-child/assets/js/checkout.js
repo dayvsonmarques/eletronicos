@@ -32,12 +32,9 @@
 
             $('body').trigger('update_checkout');
 
-            // Foca no campo de endereço para o usuário adicionar o número
-            var $addr = $('#billing_address_1');
-            if ($addr.length && data.logradouro) {
-              $addr.focus();
-              var len = $addr.val().length;
-              $addr[0].setSelectionRange(len, len);
+            var $number = $('#billing_number');
+            if ($number.length) {
+              $number.focus();
             }
           })
           .catch(function () {});
