@@ -22,6 +22,9 @@ add_action('wp_enqueue_scripts', function () {
 
     if (is_checkout()) {
         wp_enqueue_script('storefront-checkout', get_stylesheet_directory_uri() . '/assets/js/checkout.js', ['jquery'], '1.0.0', true);
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            wp_enqueue_script('storefront-checkout-dev', get_stylesheet_directory_uri() . '/assets/js/dev-checkout-fill.js', ['jquery'], time(), true);
+        }
     }
 });
 
