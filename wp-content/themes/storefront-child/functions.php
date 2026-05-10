@@ -97,6 +97,16 @@ add_filter('gettext', function ($translation, $text, $domain) {
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
 
+remove_action('woocommerce_checkout_terms_and_conditions', 'wc_checkout_privacy_policy_text', 20);
+
+add_action('woocommerce_review_order_after_submit', function () {
+    $privacy_page_id = wc_privacy_policy_page_id();
+    $link = $privacy_page_id
+        ? '<a href="' . esc_url(get_permalink($privacy_page_id)) . '" target="_blank">política de privacidade</a>'
+        : 'política de privacidade';
+    echo '<p class="checkout-privacy-notice">Seus dados pessoais serão usados para processar seu pedido, oferecer suporte à sua experiência em todo este site e para outros fins descritos em nossa ' . $link . '.</p>';
+});
+
 add_action('woocommerce_thankyou_asaas-pix', function ($order_id) {
     $order = wc_get_order($order_id);
     if (!$order || !$order->has_status(['processing', 'completed'])) return;

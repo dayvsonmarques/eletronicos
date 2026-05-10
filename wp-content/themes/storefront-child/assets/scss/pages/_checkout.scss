@@ -343,6 +343,15 @@ body:not(.logged-in) .checkout.woocommerce-checkout {
       }
     }
 
+    .checkout-privacy-notice {
+      font-size: 0.75rem;
+      color: $color-muted;
+      margin-top: $spacing-sm;
+      text-align: center;
+
+      a { color: $color-muted; text-decoration: underline; }
+    }
+
     .place-order {
       text-align: center;
 
