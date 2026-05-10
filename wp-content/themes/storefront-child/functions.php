@@ -83,6 +83,10 @@ add_filter('woocommerce_checkout_get_value', function ($value, $input) {
     return $map[$input] ?? $value;
 }, 10, 2);
 
+add_filter('woocommerce_cancel_unpaid_order', function ($cancel, $order) {
+    return $order->get_payment_method() === 'asaas-pix' ? false : $cancel;
+}, 10, 2);
+
 add_filter('gettext', function ($translation, $text, $domain) {
     if ($domain === 'woocommerce' && $text === 'Username or email') {
         return 'Usuário ou email';
