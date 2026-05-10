@@ -97,6 +97,22 @@ add_filter('gettext', function ($translation, $text, $domain) {
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
 
+add_action('woocommerce_thankyou_asaas-pix', function ($order_id) {
+    $order = wc_get_order($order_id);
+    if (!$order || !$order->has_status(['processing', 'completed'])) return;
+    $gateways = WC()->payment_gateways()->payment_gateways();
+    if (!isset($gateways['asaas-pix'])) return;
+    remove_action('woocommerce_thankyou_asaas-pix', [$gateways['asaas-pix'], 'append_html_to_thankyou_page'], 10);
+}, 1);
+
+add_action('woocommerce_view_order', function ($order_id) {
+    $order = wc_get_order($order_id);
+    if (!$order || !$order->has_status(['processing', 'completed'])) return;
+    $gateways = WC()->payment_gateways()->payment_gateways();
+    if (!isset($gateways['asaas-pix'])) return;
+    remove_action('woocommerce_view_order', [$gateways['asaas-pix'], 'append_html_to_thankyou_page'], 10);
+}, 1);
+
 add_action('woocommerce_register_form_start', function () {
     if (!empty($_GET['email'])) {
         $prefill = sanitize_email(wp_unslash($_GET['email']));
