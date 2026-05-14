@@ -16,6 +16,25 @@
 
   <?php do_action('storefront_before_header'); ?>
 
+  <div class="announcement-bar" id="announcement-bar">
+    <span>Frete grátis para pedidos acima de R$150 &nbsp;·&nbsp; <a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">Compre agora →</a></span>
+    <button class="announcement-close" id="announcement-close" aria-label="Fechar">✕</button>
+  </div>
+  <script>
+  (function(){
+    if (localStorage.getItem('ann_closed') === '1') {
+      document.getElementById('announcement-bar').style.display = 'none';
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.getElementById('announcement-close');
+      if (btn) btn.addEventListener('click', function () {
+        document.getElementById('announcement-bar').style.display = 'none';
+        localStorage.setItem('ann_closed', '1');
+      });
+    });
+  })();
+  </script>
+
   <header id="masthead" class="site-header" role="banner">
 
     <div class="header-main">
@@ -67,10 +86,11 @@
     <nav id="site-nav" class="header-nav-bar" aria-label="Menu principal">
       <?php
         wp_nav_menu([
-          'theme_location' => 'primary',
-          'container'      => false,
-          'menu_class'     => 'header-menu',
-          'fallback_cb'    => false,
+          'theme_location'  => 'primary',
+          'container'       => 'div',
+          'container_class' => 'col-full',
+          'menu_class'      => 'header-menu',
+          'fallback_cb'     => false,
         ]);
       ?>
     </nav>
@@ -83,9 +103,9 @@
 
   </header>
 
-  <?php do_action('storefront_before_content'); ?>
-
   <div id="content" class="site-content" tabindex="-1">
+
+  <?php do_action('storefront_before_content'); ?>
 
   <?php if (is_front_page()) :
     $banner_query = new WP_Query([
@@ -97,9 +117,7 @@
     $banners = $banner_query->have_posts() ? $banner_query->posts : [];
     if (empty($banners)) {
       $banners = [
-        ['url' => 'https://via.placeholder.com/1920x600?text=Banner+1', 'alt' => 'Banner 1', 'link' => '', 'text' => ''],
-        ['url' => 'https://via.placeholder.com/1920x600?text=Banner+2', 'alt' => 'Banner 2', 'link' => '', 'text' => ''],
-        ['url' => 'https://via.placeholder.com/1920x600?text=Banner+3', 'alt' => 'Banner 3', 'link' => '', 'text' => ''],
+        ['url' => 'https://via.placeholder.com/1920x600/111111/ffffff?text=Banner', 'alt' => 'Banner', 'link' => '', 'text' => ''],
       ];
     }
   ?>
@@ -115,26 +133,29 @@
       <div class="carousel-inner">
         <?php $i = 0; foreach ($banners as $banner) :
           if (isset($banner->ID)) {
-            $img_url  = get_the_post_thumbnail_url($banner->ID, 'full');
-            $img_alt  = esc_attr(get_the_title($banner->ID));
-            $img_link = get_post_meta($banner->ID, '_banner_link', true);
-            $img_text = get_post_meta($banner->ID, '_banner_text', true);
+            $img_url    = get_the_post_thumbnail_url($banner->ID, 'full');
+            $img_alt    = esc_attr(get_the_title($banner->ID));
+            $img_link   = get_post_meta($banner->ID, '_banner_link', true);
+            $img_text   = get_post_meta($banner->ID, '_banner_text', true);
           } else {
-            $img_url  = $banner['url'];
-            $img_alt  = $banner['alt'];
-            $img_link = $banner['link'];
-            $img_text = $banner['text'];
+            $img_url    = $banner['url'];
+            $img_alt    = $banner['alt'];
+            $img_link   = $banner['link'];
+            $img_text   = $banner['text'];
           }
+          $hero_title = $img_text ?: 'OS MELHORES COMPONENTES ELETRÔNICOS';
         ?>
         <div class="carousel-item<?php if ($i++ === 0) echo ' active'; ?>">
           <?php if ($img_link) : ?><a href="<?php echo esc_url($img_link); ?>"><?php endif; ?>
             <img src="<?php echo esc_url($img_url); ?>" class="d-block w-100" alt="<?php echo $img_alt; ?>">
-            <?php if ($img_text) : ?>
-              <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
-                <span class="fs-4 text-white"><?php echo esc_html($img_text); ?></span>
-              </div>
-            <?php endif; ?>
           <?php if ($img_link) : ?></a><?php endif; ?>
+          <div class="hero-overlay">
+            <div class="col-full">
+              <h1 class="hero-title"><?php echo esc_html($hero_title); ?></h1>
+              <p class="hero-subtitle">Arduino, ESP32, Raspberry Pi e muito mais</p>
+              <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="hero-cta">Explorar produtos</a>
+            </div>
+          </div>
         </div>
         <?php endforeach; ?>
       </div>
@@ -146,6 +167,27 @@
         <span class="carousel-arrow-icon" aria-hidden="true">&#x203A;</span>
         <span class="visually-hidden">Próximo</span>
       </button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="col-full">
+        <div class="hero-stats-row">
+          <div class="hero-stat">
+            <span class="stat-num">150+</span>
+            <span class="stat-label">Produtos</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="stat-num">500+</span>
+            <span class="stat-label">Clientes</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="stat-num">2.000+</span>
+            <span class="stat-label">Pedidos</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

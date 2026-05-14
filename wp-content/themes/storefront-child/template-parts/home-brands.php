@@ -7,23 +7,34 @@ $brands = get_posts( [
 	'order'          => 'ASC',
 ] );
 
-if ( empty( $brands ) ) return;
+$fallback = [ 'Arduino', 'Raspberry Pi', 'Espressif', 'Minipa', 'Dremel' ];
+$items    = ! empty( $brands ) ? $brands : null;
 ?>
 <section class="home-brands">
-	<div class="col-full">
-		<h2 class="section-title">Marcas</h2>
-		<div class="brands-grid">
-			<?php foreach ( $brands as $brand ) :
-				$logo = get_the_post_thumbnail_url( $brand->ID, 'medium' );
+	<div class="brands-marquee-wrapper">
+		<div class="brands-marquee-track">
+			<?php
+			$render_items = function( $source ) use ( $items, $fallback ) {
+				if ( $items ) {
+					foreach ( $items as $brand ) {
+						$logo = get_the_post_thumbnail_url( $brand->ID, 'medium' );
+						echo '<div class="brand-item">';
+						if ( $logo ) {
+							echo '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . '">';
+						} else {
+							echo '<span class="brand-name-text">' . esc_html( $brand->post_title ) . '</span>';
+						}
+						echo '</div>';
+					}
+				} else {
+					foreach ( $fallback as $name ) {
+						echo '<div class="brand-item"><span class="brand-name-text">' . esc_html( $name ) . '</span></div>';
+					}
+				}
+			};
+			$render_items( 'a' );
+			$render_items( 'b' );
 			?>
-			<div class="brand-item">
-				<?php if ( $logo ) : ?>
-					<img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $brand->post_title ); ?>">
-				<?php else : ?>
-					<span class="brand-name-text"><?php echo esc_html( $brand->post_title ); ?></span>
-				<?php endif; ?>
-			</div>
-			<?php endforeach; ?>
 		</div>
 	</div>
 </section>
