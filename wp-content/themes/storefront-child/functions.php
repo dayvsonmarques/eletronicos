@@ -1,4 +1,9 @@
 <?php
+add_action('wp_head', function () {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+}, 1);
+
 require_once get_stylesheet_directory() . '/inc-banner-cpt.php';
 require_once get_stylesheet_directory() . '/inc-google-auth.php';
 require_once get_stylesheet_directory() . '/inc-cpts.php';
@@ -10,15 +15,9 @@ add_filter('show_admin_bar', '__return_false');
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('bootstrap-cdn', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
     wp_enqueue_style('storefront-child-main', get_stylesheet_directory_uri() . '/assets/css/main.css', ['storefront-style', 'bootstrap-cdn'], '2.0.0');
+    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap', [], null);
     wp_enqueue_script('bootstrap-cdn', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js', [], null, true);
     wp_enqueue_script('storefront-child-main', get_stylesheet_directory_uri() . '/assets/js/main.js', [], '2.0.0', true);
-
-    if (is_front_page()) {
-        $pb_image = get_theme_mod('promo_banner_image', '');
-        if ($pb_image) {
-            wp_add_inline_style('storefront-child-main', '.home-promo-banner{background-image:url(' . esc_url($pb_image) . ')}');
-        }
-    }
 
     if (is_checkout()) {
         wp_enqueue_script('storefront-checkout', get_stylesheet_directory_uri() . '/assets/js/checkout.js', ['jquery'], '1.0.0', true);
@@ -93,6 +92,18 @@ add_filter('gettext', function ($translation, $text, $domain) {
     }
     return $translation;
 }, 10, 3);
+
+add_action('init', function () {
+    remove_action('woocommerce_after_shop_loop', 'storefront_sorting_wrapper', 9);
+    remove_action('woocommerce_after_shop_loop', 'woocommerce_catalog_ordering', 10);
+    remove_action('woocommerce_after_shop_loop', 'woocommerce_result_count', 20);
+    remove_action('woocommerce_after_shop_loop', 'storefront_sorting_wrapper_close', 31);
+}, 20);
+
+add_filter('woocommerce_breadcrumb_defaults', function ($defaults) {
+    $defaults['delimiter'] = '<span class="breadcrumb-sep" aria-hidden="true">›</span>';
+    return $defaults;
+}, 20);
 
 add_filter('woocommerce_checkout_registration_required', '__return_true');
 add_filter('pre_option_woocommerce_enable_guest_checkout', fn() => 'no');
