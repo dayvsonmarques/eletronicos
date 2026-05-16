@@ -26,6 +26,10 @@
   min-height: 68px;
 }
 
+.site-header {
+  padding: 0 !important;
+}
+
 // ── Logo ──────────────────────────────────────────────────────────────────────
 .site-logo {
   flex: 0 0 auto;
@@ -222,14 +226,14 @@
     border: none;
     border-radius: $radius-sm;
     cursor: pointer;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease;
     padding: 0;
 
-    svg { display: block; fill: currentColor; }
+    svg { display: block; width: 26px; height: 26px; }
 
     &:hover {
       color: $color-primary;
-      background-color: $color-light;
+      background-color: transparent;
     }
   }
 
