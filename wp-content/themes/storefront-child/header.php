@@ -168,26 +168,6 @@
       </button>
     </div>
 
-    <div class="hero-stats">
-      <div class="col-full">
-        <div class="hero-stats-row">
-          <div class="hero-stat">
-            <span class="stat-num">150+</span>
-            <span class="stat-label">Produtos</span>
-          </div>
-          <div class="hero-stat-divider"></div>
-          <div class="hero-stat">
-            <span class="stat-num">500+</span>
-            <span class="stat-label">Clientes</span>
-          </div>
-          <div class="hero-stat-divider"></div>
-          <div class="hero-stat">
-            <span class="stat-num">2.000+</span>
-            <span class="stat-label">Pedidos</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <?php else : ?>
