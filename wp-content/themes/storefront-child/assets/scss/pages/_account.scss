@@ -96,10 +96,49 @@
 
 // Addresses page
 
+.address-section {
+  margin-bottom: $spacing-xl;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $color-dark;
+    margin: 0;
+  }
+
+  &__add {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $color-primary;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+      color: $color-primary;
+    }
+  }
+}
+
 .address-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $spacing-lg;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: $bp-sm) {
     grid-template-columns: 1fr;
@@ -111,63 +150,24 @@
   border-radius: $radius-md;
   background: $color-white;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease;
 
-  &--empty {
-    border: 2px dashed $color-border;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-
-    &:hover {
-      border-color: $color-primary;
-
-      .address-card__add-icon {
-        color: $color-primary;
-        border-color: $color-primary;
-      }
-
-      .address-card__add-label {
-        color: $color-primary;
-      }
-    }
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
   }
 
-  &__add-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-sm;
-    padding: $spacing-xl;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-    color: $color-muted;
-  }
-
-  &__add-icon {
-    color: $color-muted;
-    border: 2px dashed currentColor;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease, border-color 0.2s ease;
-  }
-
-  &__add-label {
-    font-size: $font-size-base;
-    font-weight: 600;
-    color: $color-muted;
-    transition: color 0.2s ease;
+  &--default {
+    border-color: $color-primary;
   }
 
   &__header {
-    padding: $spacing-sm $spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
     border-bottom: 1px solid $color-border;
     background: $color-light;
   }
@@ -180,21 +180,33 @@
     letter-spacing: 0.05em;
   }
 
+  &__badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: $color-white;
+    background: $color-primary;
+    padding: 2px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   &__address {
     display: block;
-    padding: $spacing-lg;
+    padding: $spacing-md;
     font-style: normal;
-    font-size: $font-size-base;
+    font-size: $font-size-sm;
     line-height: 1.7;
     color: $color-text;
     flex: 1;
   }
 
   &__footer {
-    padding: $spacing-md $spacing-lg;
-    border-top: 1px solid $color-border;
     display: flex;
+    align-items: center;
     gap: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    border-top: 1px solid $color-border;
   }
 
   &__action {
@@ -202,9 +214,26 @@
     font-weight: 500;
     color: $color-primary;
     text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 
     &:hover {
       text-decoration: underline;
+    }
+
+    &--danger {
+      color: $color-danger;
+    }
+
+    &--muted {
+      color: $color-muted;
+      margin-left: auto;
+
+      &:hover {
+        color: $color-dark;
+      }
     }
   }
 }
