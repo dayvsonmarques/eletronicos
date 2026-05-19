@@ -13,12 +13,17 @@ img {
 }
 
 a {
-  text-decoration: none;
+  text-decoration: none !important;
   outline: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
 
   &:focus,
   &:focus-visible {
     outline: none;
+    text-decoration: none !important;
   }
 }
 

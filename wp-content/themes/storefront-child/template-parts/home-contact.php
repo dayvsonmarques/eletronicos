@@ -44,11 +44,10 @@ $icons_uri = get_stylesheet_directory_uri() . '/assets/img/icons/';
 				<div class="contact-icon"><img src="<?php echo esc_url( $icons_uri . 'location.png' ); ?>" alt="Localização"></div>
 				<div class="contact-label">Nossa loja física</div>
 				<div class="contact-value">
-					<?php if ( $address ) : ?>
-						<address class="contact-address"><?php echo nl2br( esc_html( $address ) ); ?></address>
-						<?php if ( $maps_url ) : ?>
-							<a href="<?php echo esc_url( $maps_url ); ?>" class="contact-btn contact-btn--maps" target="_blank" rel="noopener noreferrer">Ver no Maps</a>
-						<?php endif; ?>
+					<?php if ( $address ) :
+						$resolved_maps_url = $maps_url ?: 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( $address );
+					?>
+						<a href="<?php echo esc_url( $resolved_maps_url ); ?>" class="contact-btn" target="_blank" rel="noopener noreferrer">Ver no Maps</a>
 					<?php else : ?>
 						<?php echo $fallback; ?>
 					<?php endif; ?>

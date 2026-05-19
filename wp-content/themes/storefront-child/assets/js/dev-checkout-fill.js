@@ -9,7 +9,7 @@
   var nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
 
   var rawCard = {
-    'asaas-cc-name':             'DAYVSON MARQUES',
+    'asaas-cc-name':             'CLIENTE TESTE',
     'asaas-cc-number':           '4444444444444444',
     'asaas-cc-expiration-month': '12',
     'asaas-cc-expiration-year':  '2030',
@@ -17,7 +17,7 @@
   };
 
   var postCard = {
-    asaas_cc_name:             'DAYVSON MARQUES',
+    asaas_cc_name:             'CLIENTE TESTE',
     asaas_cc_number:           '4444444444444444',
     asaas_cc_expiration_month: '12',
     asaas_cc_expiration_year:  '2030',
