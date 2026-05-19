@@ -95,6 +95,13 @@ add_filter('gettext', function ($translation, $text, $domain) {
     return $translation;
 }, 10, 3);
 
+add_filter('woocommerce_account_menu_items', function ($items) {
+    if (isset($items['edit-address'])) {
+        $items['edit-address'] = 'Endereços';
+    }
+    return $items;
+}, 20);
+
 
 add_action('init', function () {
     remove_action('woocommerce_after_shop_loop', 'storefront_sorting_wrapper', 9);
@@ -212,7 +219,7 @@ add_action( 'woocommerce_account_dashboard', function () {
 } );
 
 add_action( 'template_redirect', function () {
-    if ( is_order_received_page() ) {
+    if ( is_wc_endpoint_url( 'order-received' ) ) {
         remove_action( 'storefront_page', 'storefront_page_header', 10 );
     }
 } );
