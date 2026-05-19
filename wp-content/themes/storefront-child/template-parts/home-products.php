@@ -22,7 +22,7 @@ $shop_url = wc_get_page_permalink( 'shop' );
 			<?php while ( $products_query->have_posts() ) : $products_query->the_post();
 				$product = wc_get_product( get_the_ID() );
 				$thumb   = get_the_post_thumbnail_url( get_the_ID(), 'medium' )
-				           ?: 'https://via.placeholder.com/300x300/f8f9fa/999?text=Produto';
+				           ?: wc_placeholder_img_src( 'medium' );
 			?>
 			<a href="<?php the_permalink(); ?>" class="product-card">
 				<div class="product-card-image">

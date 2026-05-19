@@ -28,7 +28,7 @@ $shop_url = wc_get_page_permalink( 'shop' );
 				$sale     = (float) $product->get_sale_price();
 				$discount = $regular > 0 ? round( ( 1 - $sale / $regular ) * 100 ) : 0;
 				$thumb    = get_the_post_thumbnail_url( get_the_ID(), 'medium' )
-				            ?: 'https://via.placeholder.com/300x300/f8f9fa/999?text=Produto';
+				            ?: wc_placeholder_img_src( 'medium' );
 			?>
 			<a href="<?php the_permalink(); ?>" class="product-card">
 				<div class="product-card-image">
