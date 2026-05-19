@@ -93,3 +93,118 @@
     line-height: 1.4;
   }
 }
+
+// Addresses page
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-lg;
+
+  @media (max-width: $bp-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.address-card {
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-white;
+  overflow: hidden;
+
+  &--empty {
+    border: 2px dashed $color-border;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+
+    &:hover {
+      border-color: $color-primary;
+
+      .address-card__add-icon {
+        color: $color-primary;
+        border-color: $color-primary;
+      }
+
+      .address-card__add-label {
+        color: $color-primary;
+      }
+    }
+  }
+
+  &__add-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-xl;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: $color-muted;
+  }
+
+  &__add-icon {
+    color: $color-muted;
+    border: 2px dashed currentColor;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  &__add-label {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $color-muted;
+    transition: color 0.2s ease;
+  }
+
+  &__header {
+    padding: $spacing-sm $spacing-lg;
+    border-bottom: 1px solid $color-border;
+    background: $color-light;
+  }
+
+  &__type {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__address {
+    display: block;
+    padding: $spacing-lg;
+    font-style: normal;
+    font-size: $font-size-base;
+    line-height: 1.7;
+    color: $color-text;
+    flex: 1;
+  }
+
+  &__footer {
+    padding: $spacing-md $spacing-lg;
+    border-top: 1px solid $color-border;
+    display: flex;
+    gap: $spacing-md;
+  }
+
+  &__action {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $color-primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
