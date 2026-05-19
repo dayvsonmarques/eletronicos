@@ -5,7 +5,7 @@ $top_cats = get_terms( [
 	'hide_empty' => true,
 	'orderby'    => 'count',
 	'order'      => 'DESC',
-	'number'     => 6,
+	'number'     => 8,
 	'exclude'    => get_option( 'default_product_cat' ),
 ] );
 
