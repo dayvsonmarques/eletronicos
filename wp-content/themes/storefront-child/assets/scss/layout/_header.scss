@@ -185,19 +185,12 @@
     .nav-drawer-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: $spacing-md $spacing-lg;
+      justify-content: flex-end;
+      padding: $spacing-sm $spacing-md;
       background: $color-dark;
       position: sticky;
       top: 0;
       z-index: 1;
-    }
-
-    .nav-drawer-title {
-      font-family: $font-family-display;
-      font-size: 1.4rem;
-      color: $color-white;
-      letter-spacing: 0.05em;
     }
 
     .nav-drawer-close {
@@ -560,7 +553,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 1199;
+  z-index: 999;
   opacity: 0;
   transition: opacity 0.32s ease;
 

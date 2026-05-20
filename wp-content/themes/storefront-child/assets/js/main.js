@@ -55,7 +55,6 @@
   var drawerHeader = document.createElement('div');
   drawerHeader.className = 'nav-drawer-header';
   drawerHeader.innerHTML =
-    '<span class="nav-drawer-title">MENU</span>' +
     '<button class="nav-drawer-close" type="button" aria-label="Fechar menu">' +
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="22" height="22" aria-hidden="true">' +
     '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>' +
