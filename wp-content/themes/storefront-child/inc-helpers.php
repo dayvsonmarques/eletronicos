@@ -36,11 +36,46 @@ add_filter('get_product_search_form', function () {
 
 function eletronicos_payment_logos_svg() {
     return [
-        'Visa'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#1a1f71"/><text x="28" y="24" text-anchor="middle" fill="white" font-size="16" font-weight="900" font-style="italic" font-family="Arial,sans-serif" letter-spacing="-0.5">VISA</text></svg>',
-        'Master'  => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#252525"/><circle cx="22" cy="18" r="11" fill="#eb001b"/><circle cx="34" cy="18" r="11" fill="#f79e1b" opacity="0.88"/></svg>',
-        'Elo'     => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#ffcb04"/><text x="28" y="25" text-anchor="middle" fill="#1a1a1a" font-size="18" font-weight="900" font-family="Arial,sans-serif">elo</text></svg>',
-        'Amex'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#2671b3"/><text x="28" y="19" text-anchor="middle" fill="white" font-size="9.5" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.5">AMERICAN</text><text x="28" y="30" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial,sans-serif" letter-spacing="1">EXPRESS</text></svg>',
-        'Diners'  => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#0f3564"/><text x="28" y="19" text-anchor="middle" fill="white" font-size="10" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.5">DINERS</text><text x="28" y="30" text-anchor="middle" fill="white" font-size="9" font-weight="500" font-family="Arial,sans-serif" letter-spacing="2">CLUB</text></svg>',
-        'Pix'     => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#32bcad"/><text x="28" y="25" text-anchor="middle" fill="white" font-size="16" font-weight="900" font-family="Arial,sans-serif" letter-spacing="1">PIX</text></svg>',
+        'Visa'      => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#1a1f71"/><text x="28" y="24" text-anchor="middle" fill="white" font-size="16" font-weight="900" font-style="italic" font-family="Arial,sans-serif" letter-spacing="-0.5">VISA</text></svg>',
+        'Master'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#252525"/><circle cx="22" cy="18" r="11" fill="#eb001b"/><circle cx="34" cy="18" r="11" fill="#f79e1b" opacity="0.88"/></svg>',
+        'Elo'       => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#ffcb04"/><text x="28" y="25" text-anchor="middle" fill="#1a1a1a" font-size="18" font-weight="900" font-family="Arial,sans-serif">elo</text></svg>',
+        'Amex'      => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#2671b3"/><text x="28" y="19" text-anchor="middle" fill="white" font-size="9.5" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.5">AMERICAN</text><text x="28" y="30" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial,sans-serif" letter-spacing="1">EXPRESS</text></svg>',
+        'Diners'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#0f3564"/><text x="28" y="19" text-anchor="middle" fill="white" font-size="10" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.5">DINERS</text><text x="28" y="30" text-anchor="middle" fill="white" font-size="9" font-weight="500" font-family="Arial,sans-serif" letter-spacing="2">CLUB</text></svg>',
+        'Hipercard' => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#b3131b"/><text x="28" y="19" text-anchor="middle" fill="white" font-size="9" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.3">HIPER</text><text x="28" y="30" text-anchor="middle" fill="white" font-size="9" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0.3">CARD</text></svg>',
+        'Discover'  => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#fff" stroke="#ddd" stroke-width="1"/><circle cx="36" cy="18" r="11" fill="#f76f20"/><text x="16" y="22" text-anchor="middle" fill="#231f20" font-size="7" font-weight="900" font-family="Arial,sans-serif" letter-spacing="0">DIS</text></svg>',
+        'Pix'       => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#32bcad"/><text x="28" y="25" text-anchor="middle" fill="white" font-size="16" font-weight="900" font-family="Arial,sans-serif" letter-spacing="1">PIX</text></svg>',
+        'Boleto'    => '<svg viewBox="0 0 56 36" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="36" rx="4" fill="#1a1a1a"/><rect x="8" y="10" width="3" height="16" fill="white"/><rect x="13" y="10" width="1.5" height="16" fill="white"/><rect x="16" y="10" width="3" height="16" fill="white"/><rect x="21" y="10" width="1.5" height="16" fill="white"/><rect x="24" y="10" width="4" height="16" fill="white"/><rect x="30" y="10" width="1.5" height="16" fill="white"/><rect x="33" y="10" width="3" height="16" fill="white"/><rect x="38" y="10" width="1.5" height="16" fill="white"/><rect x="41" y="10" width="3" height="16" fill="white"/><rect x="46" y="10" width="2" height="16" fill="white"/></svg>',
     ];
 }
+
+add_action( 'init', function () {
+    if ( get_option( 'eletronicos_payment_logos_seeded' ) ) {
+        return;
+    }
+
+    $entries = [
+        [ 'title' => 'Visa',       'key' => 'Visa',      'order' => 1 ],
+        [ 'title' => 'Mastercard', 'key' => 'Master',    'order' => 2 ],
+        [ 'title' => 'Elo',        'key' => 'Elo',       'order' => 3 ],
+        [ 'title' => 'Amex',       'key' => 'Amex',      'order' => 4 ],
+        [ 'title' => 'Diners',     'key' => 'Diners',    'order' => 5 ],
+        [ 'title' => 'Hipercard',  'key' => 'Hipercard', 'order' => 6 ],
+        [ 'title' => 'Discover',   'key' => 'Discover',  'order' => 7 ],
+        [ 'title' => 'Pix',        'key' => 'Pix',       'order' => 8 ],
+        [ 'title' => 'Boleto',     'key' => 'Boleto',    'order' => 9 ],
+    ];
+
+    foreach ( $entries as $entry ) {
+        $id = wp_insert_post( [
+            'post_type'   => 'payment_logo',
+            'post_title'  => $entry['title'],
+            'post_status' => 'publish',
+            'menu_order'  => $entry['order'],
+        ] );
+        if ( $id && ! is_wp_error( $id ) ) {
+            update_post_meta( $id, '_asaas_key', $entry['key'] );
+        }
+    }
+
+    update_option( 'eletronicos_payment_logos_seeded', true );
+} );

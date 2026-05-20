@@ -163,6 +163,13 @@
   align-items: center;
 
   &:hover { color: $color-secondary; }
+
+  .eye-hide { display: none; }
+
+  &.pw-visible {
+    .eye-show { display: none; }
+    .eye-hide { display: block; }
+  }
 }
 
 // ── Submit button ─────────────────────────────────────────────────────────────
