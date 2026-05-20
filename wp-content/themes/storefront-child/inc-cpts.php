@@ -25,7 +25,7 @@ add_action('init', function () {
         'public'        => false,
         'show_ui'       => true,
         'menu_icon'     => 'dashicons-money-alt',
-        'supports'      => ['title', 'thumbnail'],
+        'supports'      => ['title', 'thumbnail', 'page-attributes', 'custom-fields'],
         'show_in_rest'  => false,
         'menu_position' => 26,
     ]);
