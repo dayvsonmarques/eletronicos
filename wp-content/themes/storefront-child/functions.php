@@ -9,6 +9,7 @@ require_once get_stylesheet_directory() . '/inc-google-auth.php';
 require_once get_stylesheet_directory() . '/inc-cpts.php';
 require_once get_stylesheet_directory() . '/inc-customizer.php';
 require_once get_stylesheet_directory() . '/inc-helpers.php';
+require_once get_stylesheet_directory() . '/inc-newsletter.php';
 
 add_filter('show_admin_bar', '__return_false');
 
